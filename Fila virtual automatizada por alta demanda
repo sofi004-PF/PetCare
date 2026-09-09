@@ -1,0 +1,8 @@
+Como Comprador / Fan
+Quiero ingresar a una fila virtual asignada por turno al haber alta concurrencia
+Para asegurar mi lugar de compra ordenadamente sin que el sistema colapse
+
+ Criterios de Aceptación
+- [ ] La fila virtual debe activarse automáticamente cuando el tráfico supere las 1.000 solicitudes por minuto.
+- [ ] El sistema debe mostrar al usuario su posición en la fila y un tiempo estimado de espera actualizado en tiempo real.
+- [ ] Al llegar el turno, el usuario debe disponer de un tiempo límite de 10 minutos para iniciar el proceso de compra antes de reasignar el turno.
