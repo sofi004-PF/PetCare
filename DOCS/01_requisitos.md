@@ -1,4 +1,4 @@
- 2. Matriz de Transformación: Problemas, Necesidades y Requisitos Funcionales
+ Matriz de Transformación: Problemas, Necesidades y Requisitos Funcionales
 
 | # | Problema Identificado | Necesidad de Software | Requisito Funcional (RF) |
 |---|---|---|---|
