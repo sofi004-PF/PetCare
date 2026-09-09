@@ -1,0 +1,5 @@
+Actores del Sistema:
+
+1. Dueño de Mascota (Cliente): Usuario final responsable de las mascotas. Consulta expedientes, esquemas de vacunación y agenda o cancela citas desde el módulo público o su perfil privado.
+2. Veterinario (Operador / Especialista Médico): Profesional de la salud encargado de registrar diagnósticos, tratamientos, órdenes médicas y vacunas en la historia clínica digital durante la consulta.
+3. Recepcionista (Administrador de Agenda y Atención): Usuario operativo encargado de administrar la disponibilidad de los calendarios médicos, confirmar o reasignar citas y registrar el ingreso físico de los pacientes a la sala de espera.
