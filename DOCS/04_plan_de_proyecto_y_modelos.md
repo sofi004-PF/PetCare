@@ -4,3 +4,4 @@ Scrum Master: Mauricio Jelpud
 Equipo de Desarrollo: Camilo Villota y Estevan Ordoñes 
 
 **Artefactos de Scrum**
+# 1. Selección y Justificación del Modelo de Proceso
