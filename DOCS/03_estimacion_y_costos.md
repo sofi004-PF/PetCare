@@ -25,7 +25,7 @@
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | #1 | [HU-01] Agendamiento de citas médicas en línea | 5 SP | 8 hrs/SP | 40 hrs | $45.000 COP | $1.800.000  COP| |
 | #2 | [HU-02] Registro de historial clínico por paciente | 13 SP| 8 hrs/SP | 104 | $45.000 COP | $4.680.000 COP | |
-| #3 | [HU-03] Notificaciones automáticas de vacunación y desparasitación | | 8 hrs/SP | | $45.000 COP | | |
+| #3 | [HU-03] Notificaciones automáticas de vacunación y desparasitación | 3 SP | 8 hrs/SP | 24 hrs | $45.000 COP | $1.080.000 COP | |
 | #4 | [HU-04] Control de inventario de farmacia veterinaria | 3 | 24 hrs/SP | | $135.000 COP | | |
 | #5 | [HU-05] Generación de facturas por servicios prestados | 1 | 8hrs/SP | | $45.000 COP | | |
 | #6 | [HU-06] Emisión de recetas médicas digitales | 2 | 16hrs/SP | | $90.000 COP | | |
