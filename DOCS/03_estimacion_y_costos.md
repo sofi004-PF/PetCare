@@ -16,6 +16,7 @@
 **Puntaje Pivote Asignado:** [1 SP o 2 SP]
 
 **Factor de Conversión** (Fc): 1 SP = 8 Horas.
+
 **Tarifa Hora** (Th): $45.000 COP/Hora.
 
 # **3. Matriz Detallada de Estimación Formal y Presupuesto**
