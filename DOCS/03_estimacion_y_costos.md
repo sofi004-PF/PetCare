@@ -1,4 +1,4 @@
-1. Integrantes y Asignación de Roles
+**1. Integrantes y Asignación de Roles**
 
 Product Owner: [Nombre del estudiante]
 
