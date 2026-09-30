@@ -23,16 +23,16 @@
 | ID Issue | Historia de usuario | Story Points | Factor(Fc) | Esfuerzo | Tarifa | Costo Total | Justificación técnica |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | #1 | [HU-01] Agendamiento de citas médicas en línea | | 8 | | $45.000 COP | | |
-| #11 | [HU-02] Registro de historial clínico por paciente | | 8 | | $45.000 COP | | |
-| #12 | [HU-03] Notificaciones automáticas de vacunación y desparasitación | | 8 | | $45.000 COP | | |
-| #13 | [HU-04] Control de inventario de farmacia veterinaria | | 8 | | $45.000 COP | | |
-| #14 | [HU-05] Generación de facturas por servicios prestados | | 8 | | $45.000 COP | | |
-| #15 | [HU-06] Emisión de recetas médicas digitales | | 8 | | $45.000 COP | | |
-| #16 | [HU-07] Registro y gestión de propietarios | | 8 | | $45.000 COP | | |
-| #17 | [HU-08] Registro de consultas veterinarias | | 8 | | $45.000 COP | | |
-| #18 | [HU-09] Registro y seguimiento de tratamientos | | 8 | | $45.000 COP | | |
-| #19 | [HU-10] Generación de reportes administrativos y clínicos | | 8 | | $45.000 COP | | |
-| #20 | [HU-11] Gestión de usuarios y roles del sistema | | 8 | | $45.000 COP | | |
+| #2 | [HU-02] Registro de historial clínico por paciente | | 8 | | $45.000 COP | | |
+| #3 | [HU-03] Notificaciones automáticas de vacunación y desparasitación | | 8 | | $45.000 COP | | |
+| #4 | [HU-04] Control de inventario de farmacia veterinaria | | 8 | | $45.000 COP | | |
+| #5 | [HU-05] Generación de facturas por servicios prestados | | 8 | | $45.000 COP | | |
+| #6 | [HU-06] Emisión de recetas médicas digitales | | 8 | | $45.000 COP | | |
+| #7 | [HU-07] Registro y gestión de propietarios | | 8 | | $45.000 COP | | |
+| #8 | [HU-08] Registro de consultas veterinarias | | 8 | | $45.000 COP | | |
+| #9 | [HU-09] Registro y seguimiento de tratamientos | | 8 | | $45.000 COP | | |
+| #10 | [HU-10] Generación de reportes administrativos y clínicos | | 8 | | $45.000 COP | | |
+| #11 | [HU-11] Gestión de usuarios y roles del sistema | | 8 | | $45.000 COP | | |
 
 
 # **4. Consolidado Total del Proyecto**
