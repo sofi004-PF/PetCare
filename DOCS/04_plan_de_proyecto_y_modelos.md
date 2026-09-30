@@ -12,3 +12,6 @@ Equipo de Desarrollo: Camilo Villota y Estevan Ordoñes
 
 
 # 3. Planificación Detallada de Sprints
+
+
+# 4. Resumen Comercial de la Propuesta (Línea Base Final)
