@@ -1,4 +1,4 @@
-**1. Integrantes y Asignación de Roles**
+#**1. Integrantes y Asignación de Roles**
 
 **Product Owner:** [Nombre del estudiante]
 
@@ -9,7 +9,7 @@
 **Desarrollador(a) 2:** [Nombre del estudiante]
 
 
-**2. Parámetros Base de Estimación**
+#**2. Parámetros Base de Estimación**
 
 **Historia Pivote Seleccionada:** [Nombre e ID de la HU Pivote]
 
@@ -24,7 +24,7 @@ T
 h
 ): $45.000 COP/Hora.
 
-3. Matriz Detallada de Estimación Formal y Presupuesto
+#**3. Matriz Detallada de Estimación Formal y Presupuesto**
 
 | ID Issue  | Historia de usuario | Story Points | Factor(Fc) | Esfuerzo | Tarifa | Costo Total | Justificación tecnica |
 | --------- | ------------------- | ------------ | ---------- | -------- | ------ | ----------- | --------------------- |
@@ -41,7 +41,7 @@ h
 | Dato 3    | Dato 4              |              |            |          |        |             |                       |
 
 
-4. Consolidado Total del Proyecto
+#**4. Consolidado Total del Proyecto**
 Total Story Points (
 S
 P
