@@ -1,8 +1,11 @@
 1. Integrantes y Asignación de Roles
 
 Product Owner: [Nombre del estudiante]
+
 Líder Técnico: [Nombre del estudiante]
+
 Desarrollador(a) 1: [Nombre del estudiante]
+
 Desarrollador(a) 2: [Nombre del estudiante]
 
 
