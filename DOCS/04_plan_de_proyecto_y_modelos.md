@@ -8,3 +8,7 @@ Equipo de Desarrollo: Camilo Villota y Estevan Ordoñes
 
 
 # 2. Parámetros de Planificación
+
+
+
+# 3. Planificación Detallada de Sprints
