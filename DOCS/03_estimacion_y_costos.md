@@ -29,9 +29,9 @@
 | #4 | [HU-04] Control de inventario de farmacia veterinaria | 3 | 24 hrs/SP | | $135.000 COP | | |
 | #5 | [HU-05] Generación de facturas por servicios prestados | 1 | 8hrs/SP | | $45.000 COP | | |
 | #6 | [HU-06] Emisión de recetas médicas digitales | 2 | 16hrs/SP | | $90.000 COP | | |
-| #7 | [HU-07] Registro y gestión de propietarios | | 8 | | $45.000 COP | | |
-| #8 | [HU-08] Registro de consultas veterinarias | | 8 | | $45.000 COP | | |
-| #9 | [HU-09] Registro y seguimiento de tratamientos | | 8 | | $45.000 COP | | |
+| #7 | [HU-07] Registro y gestión de propietarios | 5 SP | 8 hrs/SP | 40 hrs | $45.000 COP | $1.800.000  COP| |
+| #8 | [HU-08] Registro de consultas veterinarias | 5 SP | 8 hrs/SP | 40 hrs | $45.000 COP | $1.800.000  COP| |
+| #9 | [HU-09] Registro y seguimiento de tratamientos | 5 SP | 8 hrs/SP | 40 hrs | $45.000 COP | $1.800.000  COP| |
 | #10 | [HU-10] Generación de reportes administrativos y clínicos |3 | 24hrs/SP | | $135.000 COP | | |
 | #11 | [HU-11] Gestión de usuarios y roles del sistema |5 | 40hrs/SP | | $225.000 COP | | |
 
