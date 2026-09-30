@@ -37,6 +37,9 @@
 
 
 # **4. Consolidado Total del Proyecto**
-Total Story Points (SP total): XX SP.
+
+Total Story Points (SP total): 53 SP.
+
 Esfuerzo Total (E total): XX Horas.
+
 Presupuesto Comercial Total (C total): $XX.XXX.XXX COP.
