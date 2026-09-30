@@ -10,7 +10,7 @@ Desarrollador(a) 2: [Nombre del estudiante]
 
 
 2. Parámetros Base de Estimación
-3. 
+
 Historia Pivote Seleccionada: [Nombre e ID de la HU Pivote]
 
 Puntaje Pivote Asignado: [1 SP o 2 SP]
@@ -24,7 +24,7 @@ T
 h
 ): $45.000 COP/Hora.
 
-5. Matriz Detallada de Estimación Formal y Presupuesto
+3. Matriz Detallada de Estimación Formal y Presupuesto
 
 | ID Issue  | Historia de usuario | Story Points | Factor(Fc) | Esfuerzo | Tarifa | Costo Total | Justificación tecnica |
 | --------- | ------------------- | ------------ | ---------- | -------- | ------ | ----------- | --------------------- |
