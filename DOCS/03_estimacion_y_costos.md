@@ -14,3 +14,36 @@ Tarifa Hora (
 T
 h
 ): $45.000 COP/Hora.
+
+Matriz Detallada de Estimación Formal y Presupuesto
+ID Issue	Historia de Usuario	Story Points (
+S
+P
+)	Factor (
+F
+c
+)	Esfuerzo (
+E
+i
+=
+S
+P
+×
+F
+c
+)	Tarifa (
+T
+h
+)	Costo Total (
+C
+i
+=
+E
+i
+×
+T
+h
+)	Justificación Técnica Juicio de Expertos
+#1	[Nombre HU]	X SP	8 hrs/SP	XX hrs	$45.000	$XXX.XXX COP	[Explicación de la complejidad y riesgos]
+#2	[Nombre HU]	X SP	8 hrs/SP	XX hrs	$45.000	$XXX.XXX COP	[Explicación de la complejidad y riesgos]
+...	...	...	...	...	...	...	...
