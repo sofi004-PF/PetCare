@@ -24,7 +24,7 @@
 | ID Issue | Historia de usuario | Story Points | Factor(Fc) | Esfuerzo | Tarifa | Costo Total | Justificación técnica |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | #1 | [HU-01] Agendamiento de citas médicas en línea | 5 SP | 8 hrs/SP | 40 hrs | $45.000 COP | $1.800.000  COP| Complejidad media ya que Se requiere realizar diferentes automatizaciones, asignación de recursos gestión de horarios, validaciones y disponibilidad  |
-| #2 | [HU-02] Registro de historial clínico por paciente | 13 SP| 8 hrs/SP | 104 | $45.000 COP | $4.680.000 COP |Complejidad alta por que centraliza toda la información médica de las mascotas y soporta procesos clínicos arduos por ello se requiere almacenamiento estructurado y seguro de la información|
+| #2 | [HU-02] Registro de historial clínico por paciente | 13 SP| 8 hrs/SP | 104 hrs | $45.000 COP | $4.680.000 COP |Complejidad alta por que centraliza toda la información médica de las mascotas y soporta procesos clínicos arduos por ello se requiere almacenamiento estructurado y seguro de la información|
 | #3 | [HU-03] Notificaciones automáticas de vacunación y desparasitación | 2 SP | 8 hrs/SP | 16 hrs | $45.000 COP | $72.000 COP | Notificación y aviso simples |
 | #4 | [HU-04] Control de inventario de farmacia veterinaria | 3 SP| 8 hrs/SP | 24 hrs | $45.000 COP |$1.080.000 COP |Complejidad media. Requiere la creación del CRUD para insumos y medicamentos, lógica de control de stock/lotes, alertas de vencimiento, umbrales mínimos y registro de entradas y salidas en inventario. |
 | #5 | [HU-05] Generación de facturas por servicios prestados | 1 SP| 8hrs/SP | 8 hrs | $45.000 COP |$360.000 COP |Complejidad baja. Consiste en la consolidación de servicios consumidos durante la atención, cálculo de impuestos/totales y la generación de la plantilla de comprobante de pago para impresión o exportación. |
@@ -40,6 +40,6 @@
 
 Total Story Points (SP total): 53 SP.
 
-Esfuerzo Total (E total): XX Horas.
+Esfuerzo Total (E total): 416 Horas.
 
 Presupuesto Comercial Total (C total): $XX.XXX.XXX COP.
