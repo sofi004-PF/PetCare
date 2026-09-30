@@ -1,4 +1,5 @@
 1. Integrantes y Asignación de Roles
+
 Product Owner: [Nombre del estudiante]
 Líder Técnico: [Nombre del estudiante]
 Desarrollador(a) 1: [Nombre del estudiante]
@@ -15,6 +16,7 @@ T
 h
 ): $45.000 COP/Hora.
 
+3. Matriz Detallada de Estimación Formal y Presupuesto
 
 | ID Issue  | Historia de usuario | Story Points | Factor(Fc) | Esfuerzo | Tarifa | Costo Total | Justificación tecnica |
 | --------- | ------------------- | ------------ | ---------- | -------- | ------ | ----------- | --------------------- |
@@ -29,3 +31,19 @@ h
 | Dato 3    | Dato 4              |              |            |          |        |             |                       |
 | Dato 3    | Dato 4              |              |            |          |        |             |                       |
 | Dato 3    | Dato 4              |              |            |          |        |             |                       |
+
+
+4. Consolidado Total del Proyecto
+Total Story Points (
+S
+P
+total
+): XX SP.
+Esfuerzo Total (
+E
+total
+): XX Horas.
+Presupuesto Comercial Total (
+C
+total
+): $XX.XXX.XXX COP.
