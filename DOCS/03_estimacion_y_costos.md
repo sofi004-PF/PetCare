@@ -19,4 +19,13 @@ h
 | ID Issue  | Historia de usuario | Story Points | Factor(Fc) | Esfuerzo | Tarifa | Costo Total | Justificación tecnica |
 | --------- | ------------------- | ------------ | ---------- | -------- | ------ | ----------- | --------------------- |
 | Dato 1    | Dato 2              |              |            |.         |.       |.            |.                      |
-| Dato 3    | Dato 4              |              |            |          |        |             |                       | 
+| Dato 3    | Dato 4              |              |            |          |        |             |                       |
+| Dato 3    | Dato 4              |              |            |          |        |             |                       |
+| Dato 3    | Dato 4              |              |            |          |        |             |                       |
+| Dato 3    | Dato 4              |              |            |          |        |             |                       |
+| Dato 3    | Dato 4              |              |            |          |        |             |                       |
+| Dato 3    | Dato 4              |              |            |          |        |             |                       |
+| Dato 3    | Dato 4              |              |            |          |        |             |                       |
+| Dato 3    | Dato 4              |              |            |          |        |             |                       |
+| Dato 3    | Dato 4              |              |            |          |        |             |                       |
+| Dato 3    | Dato 4              |              |            |          |        |             |                       |
