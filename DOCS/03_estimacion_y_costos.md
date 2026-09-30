@@ -4,6 +4,8 @@ Product Owner: [Nombre del estudiante]
 Líder Técnico: [Nombre del estudiante]
 Desarrollador(a) 1: [Nombre del estudiante]
 Desarrollador(a) 2: [Nombre del estudiante]
+
+
 2. Parámetros Base de Estimación
 Historia Pivote Seleccionada: [Nombre e ID de la HU Pivote]
 Puntaje Pivote Asignado: [1 SP o 2 SP]
