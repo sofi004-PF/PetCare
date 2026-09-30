@@ -8,8 +8,9 @@ Equipo de Desarrollo: Camilo Villota y Estevan Ordoñes
 
 
 # 2. Parámetros de Planificación
-
-
+Velocidad del Equipo: 12  
+Duración en Sprints del MVP: 42 sp
+Tiempo Total de Desarrollo en Semanas 3,5 = 7 semanas
 
 # 3. Planificación Detallada de Sprints
 ## Sprint 1 (Semanas 1 y 2) · Capacidad: 12 SP
