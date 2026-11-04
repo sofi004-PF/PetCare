@@ -92,4 +92,4 @@ A partir del equipo asignado (2 Desarrolladores) y un esfuerzo total de **416 ho
 | **Esfuerzo Total (E total)** | **416 Horas** *(52 SP × 8 hrs/SP)* |
 | **Tarifa Hora (Th)** | $45.000 COP/Hora ($360.000 COP por SP) |
 | **Presupuesto Comercial Total** | **$18.720.000 COP** |
-| **Presupuestol** | **$15.720.000 COP** |
+| **Costo Total del MVP** | **$15.720.000 COP** |
