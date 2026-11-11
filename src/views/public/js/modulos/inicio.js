@@ -1,6 +1,12 @@
 import { h, reemplazar } from '../ui.js';
 import { MODULOS } from './index.js';
 
+/** Primer nombre sin títulos como "Dr." o "Dra.". */
+function primerNombre(nombre) {
+  const partes = String(nombre).split(' ').filter((p) => !/^(dr|dra|doc)\.?$/i.test(p));
+  return partes[0] || nombre;
+}
+
 /**
  * Panel principal: saludo, avisos de los módulos y accesos directos.
  */
@@ -16,7 +22,7 @@ export default {
     reemplazar(contenedor,
       h('div', { class: 'titulo-pagina' },
         h('div', {},
-          h('h1', {}, `Hola, ${ctx.usuario.nombre.split(' ')[0]} 👋`),
+          h('h1', {}, `Hola, ${primerNombre(ctx.usuario.nombre)} 👋`),
           h('p', {}, `Ingresó como ${ctx.usuario.nombreRol}.`)
         )
       ),

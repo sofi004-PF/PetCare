@@ -162,6 +162,10 @@ async function calendario(veterinarioId, alElegir) {
 }
 
 async function renderAgendar(contenedor, ctx) {
+  if (!PUEDEN_AGENDAR.includes(ctx.usuario.rol)) {
+    reemplazar(contenedor, h('div', { class: 'alerta info' }, 'Las citas las agenda el cliente o el personal administrativo.'));
+    return;
+  }
   const [servicios, veterinarios, mascotas] = await Promise.all([
     get('/citas/servicios'), get('/usuarios/veterinarios'), get('/mascotas')
   ]);

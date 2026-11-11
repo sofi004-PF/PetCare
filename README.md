@@ -72,3 +72,26 @@ Todos usan la contraseña **`PetCare2026*`**.
 | HU-04 Control de inventario de farmacia veterinaria | #13 | Inventario: lotes, caducidad, descuento automático y alertas |
 | HU-05 Generación de facturas por servicios prestados | #14 | Facturación: IVA desglosado, métodos de pago, PDF y envío por correo |
 | HU-10 Generación de reportes administrativos y clínicos | #19 | Reportes: filtros, gráfico y descarga CSV para Excel |
+
+### Abrir el proyecto en Visual Studio Code o Visual Studio
+
+1. **Visual Studio Code:** *File → Open Folder…* y elegir la carpeta del repositorio.
+2. **Visual Studio 2022:** *File → Open → Folder…* (requiere la carga de trabajo *Desarrollo de Node.js*).
+3. Abrir una terminal en la carpeta y ejecutar `npm install` y luego `npm start`.
+4. Para que el servidor se reinicie solo al guardar cambios: `npm run dev`.
+
+### Cómo agregar una nueva funcionalidad
+
+Cada historia de usuario sigue el mismo recorrido por las capas:
+
+1. `src/models/` → entidad del dominio.
+2. `src/dao/` → tabla y consultas SQLite (hereda de `BaseDAO`).
+3. `src/controllers/` → reglas de negocio con contratos JSDoc; registrar la instancia en `src/controllers/index.js`.
+4. `src/routes/` → endpoints REST; registrarlos en `src/routes/index.js` y el permiso en `src/config/permisos.js`.
+5. `src/views/public/js/modulos/` → página del módulo; registrarla en `modulos/index.js`.
+6. `test/` → pruebas de los criterios de aceptación (`npm test`).
+
+### Notas del prototipo
+
+* Los correos, SMS y WhatsApp **no se envían a un servidor real**: quedan registrados en el módulo *Notificaciones* con su canal, destinatario y estado.
+* Los recordatorios de vacunación se revisan al iniciar el servidor y cada hora; el administrador puede forzar el envío desde *Recordatorios*.
