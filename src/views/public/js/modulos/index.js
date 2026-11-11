@@ -4,9 +4,13 @@
  * El menú solo muestra los módulos que el rol del usuario tiene permitidos.
  */
 import inicio from './inicio.js';
+import propietarios from './propietarios.js';
+import mascota from './mascota.js';
 import usuarios from './usuarios.js';
 
 export const MODULOS = [
   inicio,
+  propietarios,
+  mascota,
   usuarios
 ];

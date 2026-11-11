@@ -61,6 +61,11 @@ function mostrarLogin() {
   correo.focus();
 }
 
+/** Título del módulo según el rol del usuario (ej: "Mis mascotas" para clientes). */
+function tituloDe(modulo) {
+  return (modulo.tituloPara && modulo.tituloPara(estado.usuario.rol)) || modulo.titulo;
+}
+
 /** Módulos visibles para el usuario actual, en el orden del menú. */
 function modulosPermitidos() {
   return MODULOS.filter((m) => estado.modulos.includes(m.id));
@@ -69,7 +74,7 @@ function modulosPermitidos() {
 function mostrarAplicacion() {
   raiz.className = '';
   const menu = h('nav', { class: 'menu', 'aria-label': 'Menú principal' },
-    modulosPermitidos().filter((m) => !m.oculto).map((m) => h('a', { href: `#/${m.id}`, 'data-modulo': m.id }, h('span', { 'aria-hidden': 'true' }, m.icono), m.titulo))
+    modulosPermitidos().filter((m) => !m.oculto).map((m) => h('a', { href: `#/${m.id}`, 'data-modulo': m.id }, h('span', { 'aria-hidden': 'true' }, m.icono), tituloDe(m)))
   );
   const contenido = h('main', { class: 'contenido', id: 'contenido' });
 
@@ -127,7 +132,7 @@ async function navegar() {
     reemplazar(contenido, h('div', { class: 'tarjeta vacio' }, 'La página no existe o su rol no tiene acceso a ella.'));
     return;
   }
-  document.title = `${modulo.titulo} · PetCare`;
+  document.title = `${tituloDe(modulo)} · PetCare`;
   reemplazar(contenido, h('p', { class: 'vacio' }, 'Cargando…'));
   try {
     await modulo.render(contenido, contexto(parametros.map(decodeURIComponent)));

@@ -36,9 +36,21 @@ function obtenerConexion() {
  * @param {() => T} operacion - Función con las operaciones a ejecutar.
  * @returns {T} El valor retornado por la operación.
  */
+let profundidad = 0;
+
 function transaccion(operacion) {
   const db = obtenerConexion();
+  // Si ya hay una transacción abierta, la operación se une a ella.
+  if (profundidad > 0) {
+    profundidad += 1;
+    try {
+      return operacion();
+    } finally {
+      profundidad -= 1;
+    }
+  }
   db.exec('BEGIN');
+  profundidad = 1;
   try {
     const resultado = operacion();
     db.exec('COMMIT');
@@ -46,6 +58,8 @@ function transaccion(operacion) {
   } catch (error) {
     db.exec('ROLLBACK');
     throw error;
+  } finally {
+    profundidad = 0;
   }
 }
 

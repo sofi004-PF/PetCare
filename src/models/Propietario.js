@@ -1,11 +1,4 @@
 /**
- * Mascota asociada a un propietario.
- * @typedef {Object} MascotaAsociada
- * @property {string} nombre - Nombre de la mascota.
- * @property {string} especie - Especie de la mascota (ej: Canino, Felino).
- */
-
-/**
  * Modelo de datos que representa la entidad Propietario (HU-07).
  * Aplica el principio de responsabilidad única (SOLID - SRP):
  * solo describe la estructura del propietario, sin lógica de persistencia
@@ -27,8 +20,19 @@ class Propietario {
     this.telefono = telefono;
     this.correo = correo;
     this.direccion = direccion;
-    /** @type {Array<MascotaAsociada>} */
+    /** @type {Array<import('./Mascota')>} */
     this.mascotas = []; // Mascotas asociadas al propietario
+  }
+
+  /**
+   * Contrato: Construye un Propietario a partir de una fila de la base de datos.
+   * @param {Object} fila - Fila de la tabla propietarios.
+   * @returns {Propietario} Entidad.
+   */
+  static desdeFila(fila) {
+    const propietario = new Propietario(fila.id, fila.nombre, fila.documento, fila.telefono, fila.correo, fila.direccion);
+    propietario.creadoEn = fila.creado_en;
+    return propietario;
   }
 }
 

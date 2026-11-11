@@ -17,7 +17,9 @@ const TODOS = Object.keys(ROLES);
 /** Módulo → roles con acceso. */
 const PERMISOS = {
   inicio: TODOS,
-  usuarios: ['administrador']
+  usuarios: ['administrador'],
+  propietarios: TODOS,
+  mascotas: TODOS
 };
 
 /**

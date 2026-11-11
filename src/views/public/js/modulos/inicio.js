@@ -25,7 +25,7 @@ export default {
       h('div', { class: 'rejilla' },
         permitidos.map((m) => h('a', { class: 'tarjeta acceso', href: `#/${m.id}` },
           h('span', { class: 'icono', 'aria-hidden': 'true' }, m.icono),
-          h('div', {}, h('strong', {}, m.titulo), m.descripcion ? h('div', { class: 'ayuda' }, m.descripcion) : null)
+          h('div', {}, h('strong', {}, (m.tituloPara && m.tituloPara(ctx.usuario.rol)) || m.titulo), m.descripcion ? h('div', { class: 'ayuda' }, m.descripcion) : null)
         ))
       )
     );
