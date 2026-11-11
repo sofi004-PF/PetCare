@@ -6,6 +6,8 @@
 function registrarRutas(app) {
   app.use('/api/auth', require('./authRoutes'));
   app.use('/api/usuarios', require('./usuarioRoutes'));
+  app.use('/api/propietarios', require('./propietarioRoutes'));
+  app.use('/api/mascotas', require('./mascotaRoutes'));
 }
 
 module.exports = { registrarRutas };

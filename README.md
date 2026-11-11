@@ -55,9 +55,11 @@ Todos usan la contraseña **`PetCare2026*`**.
 | Veterinario | veterinario@petcare.com |
 | Veterinario | veterinario2@petcare.com |
 | Personal administrativo | recepcion@petcare.com |
+| Dueño de mascota (cliente) | cliente@petcare.com |
 
 ### Historias de usuario implementadas
 
 | HU | Issue | Módulo |
 | :--- | :---: | :--- |
 | HU-11 Gestión de usuarios y roles | #20 | Usuarios y roles, inicio de sesión y permisos |
+| HU-07 Registro y gestión de propietarios | #16 | Propietarios, mascotas y acceso del cliente |
