@@ -12,6 +12,7 @@ function registrarRutas(app) {
   app.use('/api/notificaciones', require('./notificacionRoutes'));
   app.use('/api/consultas', require('./consultaRoutes'));
   app.use('/api/historial', require('./historialRoutes'));
+  app.use('/api/tratamientos', require('./tratamientoRoutes'));
 }
 
 module.exports = { registrarRutas };

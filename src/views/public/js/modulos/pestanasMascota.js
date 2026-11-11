@@ -4,6 +4,7 @@ import { formularioMascota } from './propietarios.js';
 import { pestanaCitas } from './citas.js';
 import { pestanaConsultas } from './consultas.js';
 import { pestanaHistorial } from './historial.js';
+import { pestanaTratamientos } from './tratamientos.js';
 
 /**
  * Pestañas de la ficha de una mascota. Cada historia de usuario agrega aquí
@@ -43,6 +44,7 @@ export const PESTANAS_MASCOTA = [
   },
   pestanaHistorial,
   pestanaConsultas,
+  pestanaTratamientos,
   pestanaCitas
 ];
 

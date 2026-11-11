@@ -66,3 +66,4 @@ Todos usan la contraseña **`PetCare2026*`**.
 | HU-01 Agendamiento de citas médicas en línea | #10 | Citas: calendario, servicios, confirmación por correo |
 | HU-08 Registro de consultas veterinarias | #17 | Consultas: atención de citas y consultas anteriores |
 | HU-02 Registro de historial clínico por paciente | #11 | Historial clínico: línea de tiempo y archivos adjuntos |
+| HU-09 Registro y seguimiento de tratamientos | #18 | Tratamientos: actuales, anteriores y evolución |
