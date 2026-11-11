@@ -6,3 +6,58 @@ Además, la consulta de historiales médicos requiere tiempo adicional para loca
 * Esteban Alejandro Ordoñes
 * Sofia Fernanda Portilla
 * Juan Camilo Villota 
+
+---
+
+## Sistema web PetCare
+
+Aplicación web construida con **Node.js + Express + SQLite** siguiendo una arquitectura en 3 capas:
+
+```
+src/
+├── models/        → Entidades del dominio (SRP)
+├── dao/           → Acceso a datos en SQLite (patrón DAO)
+├── controllers/   → Reglas de negocio (patrón Facade)
+├── routes/        → API REST que expone los controladores
+├── middleware/    → Sesión y restricción por rol (HU-11)
+├── config/        → Matriz de permisos por rol
+└── views/public/  → Página web (HTML, CSS y JavaScript)
+```
+
+### Requisitos
+
+* Node.js **22.13 o superior** (usa el módulo `node:sqlite` incluido en Node).
+
+### Cómo ejecutarlo
+
+```bash
+npm install
+npm start
+```
+
+Abrir **http://localhost:3000**. La base de datos se crea sola en `data/petcare.db` con datos de prueba.
+
+Para reiniciar los datos, detener el servidor y borrar la carpeta `data/`.
+
+### Pruebas automáticas
+
+```bash
+npm test
+```
+
+### Usuarios de prueba
+
+Todos usan la contraseña **`PetCare2026*`**.
+
+| Rol | Correo |
+| :--- | :--- |
+| Administrador | admin@petcare.com |
+| Veterinario | veterinario@petcare.com |
+| Veterinario | veterinario2@petcare.com |
+| Personal administrativo | recepcion@petcare.com |
+
+### Historias de usuario implementadas
+
+| HU | Issue | Módulo |
+| :--- | :---: | :--- |
+| HU-11 Gestión de usuarios y roles | #20 | Usuarios y roles, inicio de sesión y permisos |

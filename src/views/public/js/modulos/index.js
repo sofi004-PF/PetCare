@@ -1,0 +1,12 @@
+/**
+ * Registro de módulos de la página, en el orden en que aparecen en el menú.
+ * Cada módulo exporta: { id, titulo, icono, render(contenedor, ctx), widgetInicio?(ctx) }.
+ * El menú solo muestra los módulos que el rol del usuario tiene permitidos.
+ */
+import inicio from './inicio.js';
+import usuarios from './usuarios.js';
+
+export const MODULOS = [
+  inicio,
+  usuarios
+];
