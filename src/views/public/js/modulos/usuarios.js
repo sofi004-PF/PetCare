@@ -1,5 +1,5 @@
 import { get, post, put, patch } from '../api.js';
-import { h, reemplazar, aviso, abrirModal, formulario, tabla, insignia, encabezado, confirmar, fecha } from '../ui.js';
+import { h, reemplazar, aviso, abrirModal, formulario, tabla, insignia, encabezado, confirmar, fecha, botonIcono } from '../ui.js';
 
 /**
  * HU-11: Gestión de usuarios y roles del sistema (solo administrador).
@@ -8,7 +8,7 @@ import { h, reemplazar, aviso, abrirModal, formulario, tabla, insignia, encabeza
 export default {
   id: 'usuarios',
   titulo: 'Usuarios y roles',
-  icono: '👥',
+  icono: 'escudo',
   descripcion: 'Cuentas del personal y permisos',
 
   async render(contenedor, ctx) {
@@ -54,7 +54,7 @@ export default {
 
     reemplazar(contenedor,
       encabezado('Usuarios y roles', 'Cree cuentas y asigne a cada persona el rol de su cargo.',
-        h('button', { onClick: () => abrirFormulario() }, '+ Nuevo usuario')
+        botonIcono('mas', 'Nuevo usuario', { class: 'accion', onClick: () => abrirFormulario() })
       ),
       h('div', { class: 'tarjeta' }, tabla([
         { titulo: 'Nombre', valor: (u) => h('strong', {}, u.nombre) },

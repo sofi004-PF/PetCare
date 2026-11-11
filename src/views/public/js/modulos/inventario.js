@@ -1,5 +1,6 @@
 import { get, post, put } from '../api.js';
-import { h, reemplazar, aviso, abrirModal, formulario, tabla, insignia, encabezado, fecha, fechaHora, moneda } from '../ui.js';
+import { h, reemplazar, aviso, abrirModal, formulario, tabla, insignia, encabezado, fecha, fechaHora, moneda, botonVolver, botonIcono } from '../ui.js';
+import { icono } from '../iconos.js';
 
 /**
  * HU-04: Control de inventario de farmacia veterinaria (administrador).
@@ -7,7 +8,7 @@ import { h, reemplazar, aviso, abrirModal, formulario, tabla, insignia, encabeza
 export default {
   id: 'inventario',
   titulo: 'Inventario',
-  icono: '📦',
+  icono: 'paquete',
   descripcion: 'Medicamentos, insumos y lotes',
 
   async render(contenedor, ctx) {
@@ -17,7 +18,7 @@ export default {
 
     reemplazar(contenedor,
       encabezado('Inventario de farmacia', 'El stock se descuenta automáticamente con cada venta o uso en consulta.',
-        h('button', { onClick: () => formularioProducto(ctx, tipos) }, '+ Nuevo producto')
+        botonIcono('mas', 'Nuevo producto', { class: 'accion', onClick: () => formularioProducto(ctx, tipos) })
       ),
       bajos.length ? alertaStock(bajos) : null,
       h('div', { class: 'tarjeta' }, tabla([
@@ -46,11 +47,11 @@ export default {
  * @returns {HTMLElement} Alerta.
  */
 function alertaStock(productos) {
-  return h('div', { class: 'alerta peligro', role: 'alert', style: 'grid-column:1 / -1' },
-    h('strong', {}, `⚠️ ${productos.length} producto(s) por debajo del stock mínimo`),
+  return h('div', { class: 'alerta peligro', role: 'alert', style: 'grid-column:1 / -1' }, icono('alerta'), h('div', {},
+    h('strong', {}, `${productos.length} producto(s) por debajo del stock mínimo`),
     h('ul', { style: 'margin:0.5rem 0 0' }, productos.map((p) => h('li', {},
       h('a', { href: `#/inventario/${p.id}`, style: 'color:inherit' }, p.nombre), `: ${p.stock} de ${p.stock_minimo} ${p.unidad}(s) mínimas`
-    )))
+    ))))
   );
 }
 
@@ -90,9 +91,9 @@ async function renderDetalle(contenedor, ctx, id) {
   const [p, tipos] = await Promise.all([get(`/inventario/productos/${id}`), get('/inventario/tipos')]);
   reemplazar(contenedor,
     encabezado(p.nombre, `${p.tipo} · Stock ${p.stock} ${p.unidad}(s) · Mínimo ${p.stock_minimo}`,
-      h('a', { class: 'boton secundario', href: '#/inventario' }, '← Volver'),
+      botonVolver('#/inventario'),
       h('button', { class: 'secundario', onClick: () => formularioProducto(ctx, tipos, p) }, 'Editar'),
-      h('button', { onClick: () => formularioLote(ctx, p) }, '+ Registrar lote')
+      botonIcono('mas', 'Registrar lote', { class: 'accion', onClick: () => formularioLote(ctx, p) })
     ),
     p.bajoMinimo ? alertaStock([p]) : null,
     h('div', { class: 'rejilla-2' },

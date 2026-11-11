@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="titulo">
+  <title id="titulo">PetCare, clínica veterinaria</title>
+  <rect width="64" height="64" rx="15" fill="#0D9488"/>
+  <g fill="#FFFFFF">
+    <!-- Dedos de la huella -->
+    <ellipse cx="17.5" cy="25" rx="4.6" ry="5.8" transform="rotate(-22 17.5 25)"/>
+    <ellipse cx="26.5" cy="16.5" rx="4.6" ry="6" transform="rotate(-6 26.5 16.5)"/>
+    <ellipse cx="37.5" cy="16.5" rx="4.6" ry="6" transform="rotate(6 37.5 16.5)"/>
+    <ellipse cx="46.5" cy="25" rx="4.6" ry="5.8" transform="rotate(22 46.5 25)"/>
+    <!-- Almohadilla principal en forma de cruz médica -->
+    <rect x="26.5" y="27" width="11" height="28" rx="3.5"/>
+    <rect x="18" y="35.5" width="28" height="11" rx="3.5"/>
+  </g>
+</svg>

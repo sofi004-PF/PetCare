@@ -1,5 +1,5 @@
 import { get, post, put } from '../api.js';
-import { h, reemplazar, aviso, abrirModal, formulario, tabla, encabezado, listaDatos, fecha, insignia } from '../ui.js';
+import { h, reemplazar, aviso, abrirModal, formulario, tabla, encabezado, listaDatos, fecha, insignia, botonVolver, botonIcono } from '../ui.js';
 
 const PUEDEN_EDITAR = ['administrador', 'recepcionista'];
 
@@ -10,7 +10,7 @@ const PUEDEN_EDITAR = ['administrador', 'recepcionista'];
 export default {
   id: 'propietarios',
   titulo: 'Propietarios',
-  icono: '🧑‍🤝‍🧑',
+  icono: 'personas',
   descripcion: 'Dueños y sus mascotas',
   tituloPara: (rol) => (rol === 'cliente' ? 'Mis mascotas' : null),
 
@@ -48,7 +48,7 @@ async function renderLista(contenedor, ctx) {
 
   reemplazar(contenedor,
     encabezado('Propietarios', 'Datos de contacto de los dueños y sus mascotas.',
-      PUEDEN_EDITAR.includes(ctx.usuario.rol) ? h('button', { onClick: () => abrirRegistro(ctx) }, '+ Nuevo propietario') : null
+      PUEDEN_EDITAR.includes(ctx.usuario.rol) ? botonIcono('mas', 'Nuevo propietario', { class: 'accion', onClick: () => abrirRegistro(ctx) }) : null
     ),
     h('div', { class: 'tarjeta' }, h('div', { class: 'barra-filtros', style: 'margin-bottom:1rem' }, buscador), resultados)
   );
@@ -106,7 +106,7 @@ async function renderDetalle(contenedor, ctx, id) {
 
   reemplazar(contenedor,
     encabezado(esCliente ? 'Mis datos y mascotas' : propietario.nombre, esCliente ? propietario.nombre : `Documento ${propietario.documento}`,
-      esCliente ? null : h('a', { class: 'boton secundario', href: '#/propietarios' }, '← Volver'),
+      esCliente ? null : botonVolver('#/propietarios'),
       puedeEditar ? h('button', { class: 'secundario', onClick: editar }, 'Editar datos') : null
     ),
     h('div', { class: 'rejilla-2' },

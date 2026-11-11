@@ -1,7 +1,11 @@
 import { get, post, put } from '../api.js';
-import { h, reemplazar, aviso, abrirModal, tabla, insignia, encabezado, listaDatos, fecha, moneda, hoy, confirmar } from '../ui.js';
+import {
+  h, reemplazar, aviso, abrirModal, tabla, insignia, encabezado, listaDatos, fecha, moneda, hoy, confirmar,
+  botonVolver, botonIcono, nuevoId, validarContenedor, marcarCampo, mensajeValidacion
+} from '../ui.js';
+import { icono } from '../iconos.js';
 
-const PUEDEN_AGENDAR = ['administrador', 'recepcionista', 'cliente'];
+export const PUEDEN_AGENDAR = ['administrador', 'recepcionista', 'cliente'];
 const COLOR_ESTADO = { Programada: 'info', Atendida: 'exito', Cancelada: 'peligro' };
 const DIAS = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
 
@@ -13,7 +17,7 @@ const DIAS = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
 export default {
   id: 'citas',
   titulo: 'Citas',
-  icono: '📅',
+  icono: 'calendario',
   descripcion: 'Agenda y reservas en línea',
   tituloPara: (rol) => (rol === 'cliente' ? 'Mis citas' : rol === 'veterinario' ? 'Mi agenda' : null),
 
@@ -29,14 +33,14 @@ export default {
     const veterinario = ctx.usuario.rol === 'veterinario' ? `&veterinarioId=${ctx.usuario.id}` : '';
     const citas = await get(`/citas?${filtros}${veterinario}`);
     const titulo = ctx.usuario.rol === 'cliente' ? 'Mis próximas citas' : 'Citas de hoy';
-    return h('div', { class: 'tarjeta' },
-      h('div', { class: 'titulo-pagina' }, h('h2', {}, `📅 ${titulo}`), h('a', { href: '#/citas' }, 'Ver agenda')),
+    return h('section', { class: 'tarjeta', 'aria-label': titulo },
+      h('div', { class: 'titulo-pagina' }, h('h2', {}, titulo), h('a', { href: '#/citas' }, 'Ver agenda')),
       citas.length
         ? h('div', { class: 'linea-tiempo' }, citas.slice(0, 5).map((c) => h('div', { class: 'evento' },
           h('strong', {}, `${c.hora} · ${c.mascotaNombre}`), ' ', insignia(c.estado, COLOR_ESTADO[c.estado]),
           h('div', { class: 'meta' }, `${fecha(c.fecha)} · ${c.servicioNombre} · ${c.veterinarioNombre}`)
         )))
-        : h('p', { class: 'vacio' }, 'No hay citas programadas')
+        : h('p', { class: 'vacio' }, ctx.usuario.rol === 'cliente' ? 'No tiene citas próximas. Agende una con el botón "Agendar cita".' : 'No hay citas para hoy.')
     );
   }
 };
@@ -45,13 +49,14 @@ async function renderLista(contenedor, ctx) {
   const esPersonal = ['administrador', 'recepcionista'].includes(ctx.usuario.rol);
   const veterinarios = await get('/usuarios/veterinarios');
   const resultados = h('div');
+  const ids = { fecha: nuevoId('f'), vet: nuevoId('f'), estado: nuevoId('f') };
 
-  const filtroFecha = h('input', { type: 'date', value: ctx.usuario.rol === 'cliente' ? '' : hoy(), 'aria-label': 'Fecha' });
-  const filtroVet = h('select', { 'aria-label': 'Veterinario' },
+  const filtroFecha = h('input', { id: ids.fecha, type: 'date', value: ctx.usuario.rol === 'cliente' ? '' : hoy() });
+  const filtroVet = h('select', { id: ids.vet },
     h('option', { value: '' }, 'Todos los veterinarios'),
     veterinarios.map((v) => h('option', { value: v.id, selected: ctx.usuario.rol === 'veterinario' && v.id === ctx.usuario.id }, v.nombre))
   );
-  const filtroEstado = h('select', { 'aria-label': 'Estado' },
+  const filtroEstado = h('select', { id: ids.estado },
     h('option', { value: '' }, 'Todos los estados'),
     Object.keys(COLOR_ESTADO).map((e) => h('option', { value: e }, e))
   );
@@ -70,22 +75,22 @@ async function renderLista(contenedor, ctx) {
       { titulo: 'Servicio', valor: (c) => c.servicioNombre },
       { titulo: 'Veterinario', valor: (c) => c.veterinarioNombre },
       { titulo: 'Estado', valor: (c) => insignia(c.estado, COLOR_ESTADO[c.estado]) },
-      { titulo: 'Acciones', valor: (c) => accionesCita(c, ctx) }
-    ], citas, 'No hay citas con esos filtros'));
+      { titulo: '', valor: (c) => accionesCita(c, ctx) }
+    ], citas, filtroFecha.value ? 'No hay citas ese día con esos filtros.' : 'No hay citas con esos filtros.'));
   };
 
   [filtroFecha, filtroVet, filtroEstado].forEach((control) => control.addEventListener('change', cargar));
 
   reemplazar(contenedor,
     encabezado(ctx.usuario.rol === 'cliente' ? 'Mis citas' : 'Agenda de citas',
-      esPersonal ? 'Citas de todos los veterinarios. Use los filtros para ver otro día.' : 'Consulte, cancele o reprograme sus citas.',
-      PUEDEN_AGENDAR.includes(ctx.usuario.rol) ? h('a', { class: 'boton', href: '#/citas/nueva' }, '+ Agendar cita') : null
+      esPersonal ? 'Citas de todos los veterinarios. Cambie la fecha para ver otro día.' : 'Consulte, cancele o reprograme sus citas.',
+      PUEDEN_AGENDAR.includes(ctx.usuario.rol) ? botonIcono('mas', 'Agendar cita', { class: 'accion', onClick: () => abrirAgendarCita(ctx) }) : null
     ),
     h('div', { class: 'tarjeta' },
-      h('div', { class: 'barra-filtros', style: 'margin-bottom:1rem' },
-        h('div', { class: 'campo' }, h('label', {}, 'Fecha'), filtroFecha),
-        h('div', { class: 'campo' }, h('label', {}, 'Veterinario'), filtroVet),
-        h('div', { class: 'campo' }, h('label', {}, 'Estado'), filtroEstado),
+      h('div', { class: 'barra-filtros no-imprimir', style: 'margin-bottom:1rem' },
+        h('div', { class: 'campo' }, h('label', { for: ids.fecha }, 'Fecha'), filtroFecha),
+        h('div', { class: 'campo' }, h('label', { for: ids.vet }, 'Veterinario'), filtroVet),
+        h('div', { class: 'campo' }, h('label', { for: ids.estado }, 'Estado'), filtroEstado),
         h('button', { class: 'secundario', onClick: () => { filtroFecha.value = ''; cargar(); } }, 'Ver todas las fechas')
       ),
       resultados
@@ -102,9 +107,10 @@ function accionesCita(cita, ctx) {
   return h('div', { class: 'acciones' },
     h('button', { class: 'secundario pequeno', onClick: () => abrirReprogramar(cita, ctx) }, 'Reprogramar'),
     h('button', {
-      class: 'peligro pequeno',
+      class: 'fantasma pequeno',
+      style: 'color:var(--color-peligro)',
       onClick: async () => {
-        if (!confirmar(`¿Cancelar la cita ${cita.codigo} de ${cita.mascotaNombre}?`)) return;
+        if (!confirmar(`¿Cancelar la cita ${cita.codigo} de ${cita.mascotaNombre}? El horario quedará libre para otra persona.`)) return;
         try {
           await post(`/citas/${cita.id}/cancelar`);
           aviso('Cita cancelada. El horario quedó disponible.', 'exito');
@@ -113,40 +119,44 @@ function accionesCita(cita, ctx) {
           aviso(error.message, 'error');
         }
       }
-    }, 'Cancelar')
+    }, 'Cancelar cita')
   );
 }
 
 /**
  * Calendario de días y horarios disponibles de un veterinario.
+ * Los botones usan aria-pressed para indicar el día y la hora elegidos.
  * @param {number} veterinarioId - Veterinario.
  * @param {(seleccion: {fecha: string, hora: string}) => void} alElegir - Acción al elegir horario.
  * @returns {Promise<HTMLElement>} Calendario.
  */
 async function calendario(veterinarioId, alElegir) {
   const dias = await get(`/citas/disponibilidad?veterinarioId=${veterinarioId}`);
-  const horarios = h('div', { class: 'acciones', style: 'margin-top:1rem' }, h('p', { class: 'ayuda' }, 'Seleccione un día para ver sus horarios.'));
+  const horarios = h('div', { class: 'acciones', role: 'group', 'aria-label': 'Horarios del día', style: 'margin-top:1rem' },
+    h('p', { class: 'ayuda' }, 'Seleccione un día para ver sus horarios.'));
 
   const botonesDia = dias.map((dia) => {
     const fechaDia = new Date(`${dia.fecha}T12:00:00`);
+    const nombreDia = new Intl.DateTimeFormat('es-CO', { weekday: 'long', day: 'numeric', month: 'long' }).format(fechaDia);
     const boton = h('button', {
       type: 'button',
-      class: 'secundario',
+      class: 'secundario dia-calendario',
       disabled: !dia.laboral || dia.disponibles === 0,
-      style: 'flex-direction:column;min-width:76px;gap:0',
-      title: dia.laboral ? `${dia.disponibles} horarios libres` : 'No laboral',
+      'aria-pressed': 'false',
+      'aria-label': dia.laboral ? `${nombreDia}, ${dia.disponibles} horarios libres` : `${nombreDia}, cerrado`,
       onClick: () => {
-        botonesDia.forEach((b) => { b.style.borderColor = ''; });
-        boton.style.borderColor = 'var(--color-primario)';
+        botonesDia.forEach((b) => b.setAttribute('aria-pressed', 'false'));
+        boton.setAttribute('aria-pressed', 'true');
+        alElegir({ fecha: '', hora: '' });
         reemplazar(horarios, dia.horarios.map((hr) => h('button', {
           type: 'button',
-          class: 'secundario pequeno',
+          class: 'secundario pequeno hora-calendario',
           disabled: !hr.disponible,
-          title: hr.disponible ? 'Disponible' : 'Ocupado',
+          'aria-pressed': 'false',
+          'aria-label': `${hr.hora}${hr.disponible ? '' : ', ocupado'}`,
           onClick: (evento) => {
-            horarios.querySelectorAll('button').forEach((b) => { b.style.background = ''; b.style.color = ''; });
-            evento.currentTarget.style.background = 'var(--color-primario)';
-            evento.currentTarget.style.color = '#fff';
+            horarios.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', 'false'));
+            evento.currentTarget.setAttribute('aria-pressed', 'true');
             alElegir({ fecha: dia.fecha, hora: hr.hora });
           }
         }, hr.hora)));
@@ -158,7 +168,137 @@ async function calendario(veterinarioId, alElegir) {
     return boton;
   });
 
-  return h('div', {}, h('div', { class: 'acciones' }, botonesDia), horarios);
+  return h('div', {},
+    h('div', { class: 'acciones', role: 'group', 'aria-label': 'Días disponibles' }, botonesDia),
+    horarios
+  );
+}
+
+/**
+ * Formulario completo para agendar una cita (se usa en la página y en el modal).
+ * @param {HTMLElement} contenedor - Dónde dibujarlo.
+ * @param {Object} ctx - Contexto de la página.
+ * @param {{mascotaId?: string, alAgendar: (cita: Object) => void}} opciones
+ */
+async function montarAgendar(contenedor, ctx, { mascotaId = '', alAgendar }) {
+  const [servicios, veterinarios, mascotas] = await Promise.all([
+    get('/citas/servicios'), get('/usuarios/veterinarios'), get('/mascotas')
+  ]);
+  const seleccion = { mascotaId: String(mascotaId || ''), servicioId: '', veterinarioId: '', fecha: '', hora: '', motivo: '' };
+  const ids = { mascota: nuevoId('cita'), servicio: nuevoId('cita'), vet: nuevoId('cita'), motivo: nuevoId('cita'), horario: nuevoId('cita') };
+
+  const zonaCalendario = h('div', { id: ids.horario, tabindex: '-1' }, h('p', { class: 'ayuda' }, 'Elija un veterinario para ver sus días y horarios disponibles.'));
+  const errorHorario = h('p', { class: 'error-campo', role: 'alert', hidden: true }, icono('alerta', { tamano: 14 }), 'Elija un día y una hora disponibles.');
+  const resumen = h('div');
+  const boton = h('button', { type: 'submit', class: 'accion' }, 'Confirmar cita');
+
+  const actualizarResumen = () => {
+    const servicio = servicios.find((s) => String(s.id) === seleccion.servicioId);
+    const mascota = mascotas.find((m) => String(m.id) === seleccion.mascotaId);
+    const veterinario = veterinarios.find((v) => String(v.id) === seleccion.veterinarioId);
+    reemplazar(resumen, listaDatos([
+      ['Mascota', mascota ? mascota.nombre : '—'],
+      ['Servicio', servicio ? servicio.nombre : '—'],
+      ['Veterinario', veterinario ? veterinario.nombre : '—'],
+      ['Fecha y hora', seleccion.fecha ? `${fecha(seleccion.fecha)} a las ${seleccion.hora}` : '—'],
+      ['Costo estimado', servicio ? h('strong', {}, moneda(servicio.precio)) : '—']
+    ]));
+  };
+
+  const cargarCalendario = async () => {
+    seleccion.fecha = '';
+    seleccion.hora = '';
+    reemplazar(zonaCalendario, h('p', { class: 'ayuda', role: 'status' }, 'Cargando disponibilidad…'));
+    reemplazar(zonaCalendario, await calendario(seleccion.veterinarioId, ({ fecha: f, hora }) => {
+      seleccion.fecha = f;
+      seleccion.hora = hora;
+      if (f) errorHorario.hidden = true;
+      actualizarResumen();
+    }));
+    actualizarResumen();
+  };
+
+  const selectMascota = h('select', { id: ids.mascota, name: 'mascotaId', required: true, onChange: (e) => { seleccion.mascotaId = e.target.value; actualizarResumen(); } },
+    h('option', { value: '' }, mascotas.length ? 'Seleccione la mascota…' : 'No hay mascotas registradas'),
+    mascotas.map((m) => h('option', { value: m.id, selected: String(m.id) === seleccion.mascotaId },
+      m.propietarioNombre ? `${m.nombre} (${m.especie}) · ${m.propietarioNombre}` : `${m.nombre} (${m.especie})`))
+  );
+  const selectServicio = h('select', { id: ids.servicio, name: 'servicioId', required: true, onChange: (e) => { seleccion.servicioId = e.target.value; actualizarResumen(); } },
+    h('option', { value: '' }, 'Seleccione el servicio…'),
+    servicios.map((s) => h('option', { value: s.id }, `${s.nombre} · ${moneda(s.precio)}`))
+  );
+  const selectVet = h('select', { id: ids.vet, name: 'veterinarioId', required: true, onChange: (e) => { seleccion.veterinarioId = e.target.value; if (e.target.value) cargarCalendario(); } },
+    h('option', { value: '' }, 'Seleccione el veterinario…'),
+    veterinarios.map((v) => h('option', { value: v.id }, v.nombre))
+  );
+  const motivo = h('textarea', { id: ids.motivo, name: 'motivo', placeholder: 'Ej: control anual, vómito, refuerzo de vacuna', onInput: (e) => { seleccion.motivo = e.target.value; } });
+
+  const etiqueta = (id, texto, obligatorio) => h('label', { for: id }, texto, obligatorio ? h('span', { class: 'obligatorio', 'aria-hidden': 'true' }, '*') : null);
+
+  const form = h('form', {
+    class: 'formulario',
+    noValidate: true,
+    onInput: (e) => { if (e.target.getAttribute('aria-invalid') === 'true') marcarCampo(e.target, mensajeValidacion(e.target)); },
+    onChange: (e) => { if (e.target.getAttribute('aria-invalid') === 'true') marcarCampo(e.target, mensajeValidacion(e.target)); },
+    onSubmit: async (evento) => {
+      evento.preventDefault();
+      const camposValidos = validarContenedor(form);
+      errorHorario.hidden = Boolean(seleccion.fecha && seleccion.hora);
+      if (!camposValidos) return;
+      if (!seleccion.fecha || !seleccion.hora) {
+        zonaCalendario.focus();
+        return;
+      }
+      boton.disabled = true;
+      try {
+        const cita = await post('/citas', seleccion);
+        aviso(`Cita agendada con el código ${cita.codigo}. Le enviamos un correo de confirmación.`, 'exito');
+        alAgendar(cita);
+      } catch (error) {
+        aviso(error.message, 'error');
+        if (seleccion.veterinarioId) cargarCalendario();
+      } finally {
+        boton.disabled = false;
+      }
+    }
+  },
+  h('div', { class: 'campo ancho-completo' }, etiqueta(ids.mascota, 'Mascota', true), selectMascota),
+  h('div', { class: 'campo' }, etiqueta(ids.servicio, 'Tipo de servicio', true), selectServicio),
+  h('div', { class: 'campo' }, etiqueta(ids.vet, 'Veterinario', true), selectVet),
+  h('fieldset', { class: 'ancho-completo', style: 'border:0;padding:0;margin:0;min-width:0' },
+    h('legend', { style: 'font-size:var(--t-sm);font-weight:600;margin-bottom:0.5rem' }, 'Día y hora', h('span', { class: 'obligatorio', 'aria-hidden': 'true' }, '*')),
+    zonaCalendario,
+    errorHorario
+  ),
+  h('div', { class: 'campo ancho-completo' }, etiqueta(ids.motivo, 'Motivo de la cita', false), motivo),
+  h('div', { class: 'ancho-completo tarjeta', style: 'background:var(--pizarra-50)' },
+    h('h3', { style: 'margin-bottom:0.75rem' }, 'Resumen de la reserva'),
+    resumen,
+    h('div', { class: 'acciones', style: 'margin-top:1rem' }, boton)
+  ));
+
+  reemplazar(contenedor, form);
+  actualizarResumen();
+}
+
+/**
+ * Abre el agendamiento de citas en una ventana modal.
+ * @param {Object} ctx - Contexto de la página.
+ * @param {{mascotaId?: string}} [opciones] - Mascota preseleccionada.
+ */
+export function abrirAgendarCita(ctx, { mascotaId = '' } = {}) {
+  const cuerpo = h('div', {}, h('p', { class: 'vacio', role: 'status' }, 'Cargando…'));
+  const modal = abrirModal('Agendar cita', cuerpo, { amplio: true });
+  montarAgendar(cuerpo, ctx, {
+    mascotaId,
+    alAgendar: (cita) => {
+      modal.cerrar();
+      ctx.ir(`#/citas/${cita.id}`);
+    }
+  }).then(() => {
+    const primero = cuerpo.querySelector('select');
+    if (primero) primero.focus();
+  }).catch((error) => reemplazar(cuerpo, h('div', { class: 'alerta peligro' }, icono('alerta'), h('div', {}, error.message))));
 }
 
 async function renderAgendar(contenedor, ctx) {
@@ -166,97 +306,19 @@ async function renderAgendar(contenedor, ctx) {
     reemplazar(contenedor, h('div', { class: 'alerta info' }, 'Las citas las agenda el cliente o el personal administrativo.'));
     return;
   }
-  const [servicios, veterinarios, mascotas] = await Promise.all([
-    get('/citas/servicios'), get('/usuarios/veterinarios'), get('/mascotas')
-  ]);
-  const seleccion = { mascotaId: ctx.parametros[1] || '', servicioId: '', veterinarioId: '', fecha: '', hora: '', motivo: '' };
-  const zonaCalendario = h('div', {}, h('p', { class: 'ayuda' }, 'Elija un veterinario para ver su calendario.'));
-  const resumen = h('div');
-
-  const actualizarResumen = () => {
-    const servicio = servicios.find((s) => String(s.id) === String(seleccion.servicioId));
-    const mascota = mascotas.find((m) => String(m.id) === String(seleccion.mascotaId));
-    const veterinario = veterinarios.find((v) => String(v.id) === String(seleccion.veterinarioId));
-    const completo = servicio && mascota && veterinario && seleccion.fecha && seleccion.hora;
-    reemplazar(resumen, h('div', { class: 'tarjeta' },
-      h('h2', {}, 'Resumen de la reserva'),
-      listaDatos([
-        ['Mascota', mascota ? mascota.nombre : '—'],
-        ['Servicio', servicio ? servicio.nombre : '—'],
-        ['Veterinario', veterinario ? veterinario.nombre : '—'],
-        ['Fecha y hora', seleccion.fecha ? `${fecha(seleccion.fecha)} ${seleccion.hora || ''}` : '—'],
-        ['Costo estimado', servicio ? h('strong', {}, moneda(servicio.precio)) : '—']
-      ]),
-      h('div', { class: 'acciones', style: 'margin-top:1rem' },
-        h('button', { disabled: !completo, onClick: confirmarReserva }, 'Confirmar cita')
-      )
-    ));
-  };
-
-  async function confirmarReserva(evento) {
-    const boton = evento.currentTarget;
-    boton.disabled = true;
-    try {
-      const cita = await post('/citas', seleccion);
-      aviso(`Cita agendada. Código de reserva ${cita.codigo}. Se envió un correo de confirmación.`, 'exito');
-      ctx.ir(`#/citas/${cita.id}`);
-    } catch (error) {
-      aviso(error.message, 'error');
-      boton.disabled = false;
-      if (seleccion.veterinarioId) cargarCalendario();
-    }
-  }
-
-  const cargarCalendario = async () => {
-    seleccion.fecha = '';
-    seleccion.hora = '';
-    reemplazar(zonaCalendario, await calendario(seleccion.veterinarioId, ({ fecha: f, hora }) => {
-      seleccion.fecha = f;
-      seleccion.hora = hora;
-      actualizarResumen();
-    }));
-    actualizarResumen();
-  };
-
-  const selectMascota = h('select', { id: 'cita-mascota', required: true, onChange: (e) => { seleccion.mascotaId = e.target.value; actualizarResumen(); } },
-    h('option', { value: '' }, mascotas.length ? 'Seleccione la mascota…' : 'No hay mascotas registradas'),
-    mascotas.map((m) => h('option', { value: m.id, selected: String(m.id) === String(seleccion.mascotaId) },
-      m.propietarioNombre ? `${m.nombre} (${m.especie}) · ${m.propietarioNombre}` : `${m.nombre} (${m.especie})`))
-  );
-  const selectServicio = h('select', { id: 'cita-servicio', required: true, onChange: (e) => { seleccion.servicioId = e.target.value; actualizarResumen(); } },
-    h('option', { value: '' }, 'Seleccione el servicio…'),
-    servicios.map((s) => h('option', { value: s.id }, `${s.nombre} · ${moneda(s.precio)}`))
-  );
-  const selectVet = h('select', { id: 'cita-veterinario', required: true, onChange: (e) => { seleccion.veterinarioId = e.target.value; if (e.target.value) cargarCalendario(); } },
-    h('option', { value: '' }, 'Seleccione el veterinario…'),
-    veterinarios.map((v) => h('option', { value: v.id }, v.nombre))
-  );
-  const motivo = h('textarea', { id: 'cita-motivo', placeholder: 'Ej: control anual, vómito, refuerzo de vacuna…', onInput: (e) => { seleccion.motivo = e.target.value; } });
-
+  const zona = h('div', { class: 'tarjeta' });
   reemplazar(contenedor,
-    encabezado('Agendar cita', 'Elija la mascota, el tipo de servicio y un horario disponible.',
-      h('a', { class: 'boton secundario', href: '#/citas' }, '← Volver')
-    ),
-    h('div', { class: 'rejilla-2' },
-      h('div', { class: 'tarjeta' },
-        h('form', { class: 'formulario', onSubmit: (e) => e.preventDefault() },
-          h('div', { class: 'campo ancho-completo' }, h('label', { for: 'cita-mascota' }, 'Mascota *'), selectMascota),
-          h('div', { class: 'campo' }, h('label', { for: 'cita-servicio' }, 'Tipo de servicio *'), selectServicio),
-          h('div', { class: 'campo' }, h('label', { for: 'cita-veterinario' }, 'Veterinario *'), selectVet),
-          h('div', { class: 'campo ancho-completo' }, h('label', { for: 'cita-motivo' }, 'Motivo de la cita'), motivo)
-        )
-      ),
-      resumen
-    ),
-    h('div', { class: 'tarjeta' }, h('h2', {}, 'Calendario de disponibilidad'), zonaCalendario)
+    encabezado('Agendar cita', 'Elija la mascota, el tipo de servicio y un horario disponible.', botonVolver('#/citas')),
+    zona
   );
-  actualizarResumen();
+  await montarAgendar(zona, ctx, { mascotaId: ctx.parametros[1], alAgendar: (cita) => ctx.ir(`#/citas/${cita.id}`) });
 }
 
 function abrirReprogramar(cita, ctx) {
   const contenido = h('div', {}, h('p', {}, `Elija el nuevo horario con ${cita.veterinarioNombre}.`));
-  const modal = abrirModal(`Reprogramar cita ${cita.codigo}`, contenido);
+  const modal = abrirModal(`Reprogramar cita ${cita.codigo}`, contenido, { amplio: true });
   calendario(cita.veterinarioId, async ({ fecha: f, hora }) => {
+    if (!f) return;
     if (!confirmar(`¿Mover la cita al ${fecha(f)} a las ${hora}?`)) return;
     try {
       await put(`/citas/${cita.id}/reprogramar`, { fecha: f, hora });
@@ -272,9 +334,7 @@ function abrirReprogramar(cita, ctx) {
 async function renderDetalle(contenedor, ctx, id) {
   const cita = await get(`/citas/${id}`);
   reemplazar(contenedor,
-    encabezado(`Cita ${cita.codigo}`, `${cita.mascotaNombre} · ${fecha(cita.fecha)} a las ${cita.hora}`,
-      h('a', { class: 'boton secundario', href: '#/citas' }, '← Volver')
-    ),
+    encabezado(`Cita ${cita.codigo}`, `${cita.mascotaNombre} · ${fecha(cita.fecha)} a las ${cita.hora}`, botonVolver('#/citas')),
     h('div', { class: 'tarjeta' },
       listaDatos([
         ['Código de reserva', h('strong', {}, cita.codigo)],
@@ -304,7 +364,9 @@ export const pestanaCitas = {
     reemplazar(contenedor, h('div', { class: 'tarjeta' },
       h('div', { class: 'titulo-pagina' },
         h('h2', {}, 'Citas de la mascota'),
-        PUEDEN_AGENDAR.includes(ctx.usuario.rol) ? h('a', { class: 'boton pequeno', href: `#/citas/nueva/${mascota.id}` }, '+ Agendar') : null
+        PUEDEN_AGENDAR.includes(ctx.usuario.rol)
+          ? botonIcono('mas', 'Agendar', { class: 'accion pequeno', onClick: () => abrirAgendarCita(ctx, { mascotaId: mascota.id }) })
+          : null
       ),
       tabla([
         { titulo: 'Fecha', valor: (c) => h('a', { href: `#/citas/${c.id}` }, `${fecha(c.fecha)} ${c.hora}`) },

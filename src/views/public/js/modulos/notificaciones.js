@@ -1,7 +1,10 @@
 import { get } from '../api.js';
 import { h, reemplazar, abrirModal, tabla, insignia, encabezado, fechaHora, listaDatos } from '../ui.js';
+import { icono } from '../iconos.js';
 
-const ETIQUETA_CANAL = { correo: '✉️ Correo', sms: '💬 SMS', whatsapp: '📱 WhatsApp' };
+const ETIQUETA_CANAL = { correo: 'Correo', sms: 'SMS', whatsapp: 'WhatsApp' };
+const ICONO_CANAL = { correo: 'correo', sms: 'mensaje', whatsapp: 'telefono' };
+const canal = (c) => h('span', { style: 'display:inline-flex;align-items:center;gap:0.4rem' }, icono(ICONO_CANAL[c] || 'correo', { tamano: 16 }), ETIQUETA_CANAL[c] || c);
 
 /**
  * Bandeja de mensajes enviados a los clientes (confirmaciones de cita,
@@ -11,7 +14,7 @@ const ETIQUETA_CANAL = { correo: '✉️ Correo', sms: '💬 SMS', whatsapp: '�
 export default {
   id: 'notificaciones',
   titulo: 'Notificaciones',
-  icono: '🔔',
+  icono: 'campana',
   descripcion: 'Mensajes enviados a los clientes',
   tituloPara: (rol) => (rol === 'cliente' ? 'Mis mensajes' : null),
 
@@ -21,7 +24,7 @@ export default {
     const abrir = (mensaje) => {
       abrirModal(mensaje.asunto, [
         listaDatos([
-          ['Canal', ETIQUETA_CANAL[mensaje.canal] || mensaje.canal],
+          ['Canal', canal(mensaje.canal)],
           ['Destinatario', mensaje.destinatario],
           ['Enviado', fechaHora(mensaje.creado_en)],
           ['Estado', mensaje.estado]
@@ -36,7 +39,7 @@ export default {
         'Historial de mensajes enviados con su fecha, canal y estado de entrega.'),
       h('div', { class: 'tarjeta' }, tabla([
         { titulo: 'Fecha', valor: (m) => fechaHora(m.creado_en) },
-        { titulo: 'Canal', valor: (m) => ETIQUETA_CANAL[m.canal] || m.canal },
+        { titulo: 'Canal', valor: (m) => canal(m.canal) },
         { titulo: 'Destinatario', valor: (m) => (m.propietario_nombre ? `${m.propietario_nombre} · ${m.destinatario}` : m.destinatario) },
         { titulo: 'Asunto', valor: (m) => h('a', { href: '#', onClick: (e) => { e.preventDefault(); abrir(m); } }, m.asunto) },
         { titulo: 'Estado', valor: (m) => insignia(m.estado, 'exito') }
