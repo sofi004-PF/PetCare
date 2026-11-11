@@ -71,3 +71,4 @@ Todos usan la contraseña **`PetCare2026*`**.
 | HU-03 Notificaciones automáticas de vacunación y desparasitación | #12 | Recordatorios: aviso 3 días antes y respuesta desde el mensaje |
 | HU-04 Control de inventario de farmacia veterinaria | #13 | Inventario: lotes, caducidad, descuento automático y alertas |
 | HU-05 Generación de facturas por servicios prestados | #14 | Facturación: IVA desglosado, métodos de pago, PDF y envío por correo |
+| HU-10 Generación de reportes administrativos y clínicos | #19 | Reportes: filtros, gráfico y descarga CSV para Excel |
