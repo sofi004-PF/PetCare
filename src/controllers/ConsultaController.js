@@ -91,6 +91,22 @@ class ConsultaController {
     return consulta;
   }
 
+  /**
+   * Contrato: Eventos de consultas para la línea de tiempo del historial clínico (HU-02).
+   * @param {number} mascotaId - Mascota.
+   * @returns {Array<Object>} Eventos {tipo, fecha, titulo, detalle, autor}.
+   */
+  eventosHistorial(mascotaId) {
+    return this.consultaDAO.listar({ mascotaId }).map((c) => ({
+      tipo: 'Consulta',
+      fecha: c.fecha,
+      titulo: c.motivo,
+      detalle: [`Síntomas: ${c.sintomas}`, `Diagnóstico: ${c.diagnostico}`, c.observaciones ? `Observaciones: ${c.observaciones}` : null]
+        .filter(Boolean).join('\n'),
+      autor: c.veterinarioNombre
+    }));
+  }
+
   numeroOpcional(valor, nombre, minimo, maximo) {
     if (valor === null || valor === undefined || valor === '') return null;
     const numero = Number(valor);

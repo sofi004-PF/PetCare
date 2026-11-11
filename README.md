@@ -65,3 +65,4 @@ Todos usan la contraseña **`PetCare2026*`**.
 | HU-07 Registro y gestión de propietarios | #16 | Propietarios, mascotas y acceso del cliente |
 | HU-01 Agendamiento de citas médicas en línea | #10 | Citas: calendario, servicios, confirmación por correo |
 | HU-08 Registro de consultas veterinarias | #17 | Consultas: atención de citas y consultas anteriores |
+| HU-02 Registro de historial clínico por paciente | #11 | Historial clínico: línea de tiempo y archivos adjuntos |

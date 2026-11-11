@@ -6,6 +6,7 @@
 import inicio from './inicio.js';
 import citas from './citas.js';
 import consultas from './consultas.js';
+import historial from './historial.js';
 import propietarios from './propietarios.js';
 import mascota from './mascota.js';
 import notificaciones from './notificaciones.js';
@@ -15,6 +16,7 @@ export const MODULOS = [
   inicio,
   citas,
   consultas,
+  historial,
   propietarios,
   mascota,
   notificaciones,
