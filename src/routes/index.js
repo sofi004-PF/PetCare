@@ -13,6 +13,7 @@ function registrarRutas(app) {
   app.use('/api/consultas', require('./consultaRoutes'));
   app.use('/api/historial', require('./historialRoutes'));
   app.use('/api/tratamientos', require('./tratamientoRoutes'));
+  app.use('/api/recetas', require('./recetaRoutes'));
 }
 
 module.exports = { registrarRutas };
