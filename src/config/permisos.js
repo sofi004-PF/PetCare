@@ -23,7 +23,8 @@ const PERMISOS = {
   citas: TODOS,
   notificaciones: ['administrador', 'recepcionista', 'cliente'],
   consultas: ['administrador', 'veterinario'],
-  historial: ['administrador', 'veterinario', 'cliente']
+  historial: ['administrador', 'veterinario', 'cliente'],
+  tratamientos: ['administrador', 'veterinario', 'cliente']
 };
 
 /**
