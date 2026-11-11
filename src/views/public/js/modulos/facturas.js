@@ -1,5 +1,6 @@
 import { get, post } from '../api.js';
-import { h, reemplazar, aviso, tabla, encabezado, listaDatos, fechaHora, moneda, insignia } from '../ui.js';
+import { h, reemplazar, aviso, tabla, encabezado, listaDatos, fechaHora, moneda, insignia, botonVolver, botonIcono } from '../ui.js';
+import { icono } from '../iconos.js';
 
 const IVA_SERVICIOS = 19;
 const PERSONAL = ['administrador', 'recepcionista'];
@@ -10,7 +11,7 @@ const PERSONAL = ['administrador', 'recepcionista'];
 export default {
   id: 'facturas',
   titulo: 'Facturación',
-  icono: '💳',
+  icono: 'factura',
   descripcion: 'Facturas de servicios y productos',
   tituloPara: (rol) => (rol === 'cliente' ? 'Mis facturas' : null),
 
@@ -26,7 +27,7 @@ async function renderLista(contenedor, ctx) {
   const facturas = await get('/facturas');
   reemplazar(contenedor,
     encabezado(ctx.usuario.rol === 'cliente' ? 'Mis facturas' : 'Facturación', 'Facturas generadas con su detalle e impuestos.',
-      PERSONAL.includes(ctx.usuario.rol) ? h('a', { class: 'boton', href: '#/facturas/nueva' }, '+ Nueva factura') : null
+      PERSONAL.includes(ctx.usuario.rol) ? botonIcono('mas', 'Nueva factura', { class: 'accion', href: '#/facturas/nueva' }) : null
     ),
     h('div', { class: 'tarjeta' }, tabla([
       { titulo: 'Número', valor: (f) => h('a', { href: `#/facturas/${f.id}` }, h('strong', {}, f.numero)) },
@@ -77,7 +78,7 @@ async function renderNueva(contenedor, ctx) {
         )))
       ),
       h('div', { class: 'acciones', style: 'margin-top:1rem' },
-        h('button', { disabled: !lineas.length || !estado.propietarioId, onClick: generar }, 'Generar factura')
+        h('button', { class: 'accion', disabled: !lineas.length || !estado.propietarioId, onClick: generar }, 'Generar factura')
       )
     ));
   };
@@ -130,7 +131,7 @@ async function renderNueva(contenedor, ctx) {
         productos.map((p) => h('option', { value: p.id, disabled: p.stock === 0 }, `${p.nombre} · ${moneda(p.precio_venta)} (stock ${p.stock})`))
       ),
       h('input', { type: 'number', min: '1', value: '1', 'aria-label': 'Cantidad', style: 'max-width:100px', onInput: (e) => { item.cantidad = Number(e.target.value); calcular(); } }),
-      h('button', { type: 'button', class: 'secundario pequeno', 'aria-label': 'Quitar producto', onClick: () => { estado.productos.splice(estado.productos.indexOf(item), 1); fila.remove(); calcular(); } }, '✕')
+      h('button', { type: 'button', class: 'fantasma icono-solo', 'aria-label': 'Quitar producto', onClick: () => { estado.productos.splice(estado.productos.indexOf(item), 1); fila.remove(); calcular(); } }, icono('cerrar', { tamano: 18 }))
     );
     zonaProductos.append(fila);
   };
@@ -141,14 +142,14 @@ async function renderNueva(contenedor, ctx) {
     const fila = h('div', { class: 'acciones' },
       h('input', { placeholder: 'Procedimiento o servicio', 'aria-label': 'Descripción del servicio', style: 'max-width:340px', onInput: (e) => { item.descripcion = e.target.value.trim(); calcular(); } }),
       h('input', { type: 'number', min: '0', placeholder: 'Precio', 'aria-label': 'Precio', style: 'max-width:140px', onInput: (e) => { item.precio = Number(e.target.value); calcular(); } }),
-      h('button', { type: 'button', class: 'secundario pequeno', 'aria-label': 'Quitar servicio', onClick: () => { estado.servicios.splice(estado.servicios.indexOf(item), 1); fila.remove(); calcular(); } }, '✕')
+      h('button', { type: 'button', class: 'fantasma icono-solo', 'aria-label': 'Quitar servicio', onClick: () => { estado.servicios.splice(estado.servicios.indexOf(item), 1); fila.remove(); calcular(); } }, icono('cerrar', { tamano: 18 }))
     );
     zonaServicios.append(fila);
   };
 
   reemplazar(contenedor,
     encabezado('Nueva factura', 'Servicios, procedimientos y productos consumidos por el cliente.',
-      h('a', { class: 'boton secundario', href: '#/facturas' }, '← Volver')
+      botonVolver('#/facturas')
     ),
     h('div', { class: 'rejilla-2' },
       h('div', { style: 'display:flex;flex-direction:column;gap:1rem' },
@@ -195,10 +196,10 @@ async function renderDetalle(contenedor, ctx, id) {
 
   reemplazar(contenedor,
     encabezado(`Factura ${f.numero}`, fechaHora(f.creado_en),
-      h('a', { class: 'boton secundario', href: '#/facturas' }, '← Volver'),
-      h('a', { class: 'boton secundario', href: `/api/facturas/${f.id}/pdf`, target: '_blank', rel: 'noopener' }, '⬇ PDF'),
+      botonVolver('#/facturas'),
+      botonIcono('descargar', 'PDF', { class: 'secundario', href: `/api/facturas/${f.id}/pdf`, target: '_blank', rel: 'noopener' }),
       PERSONAL.includes(ctx.usuario.rol)
-        ? h('button', { onClick: enviar }, f.enviada_en ? '✉️ Reenviar al correo' : '✉️ Enviar al correo del cliente')
+        ? h('button', { onClick: enviar }, icono('correo', { tamano: 18 }), f.enviada_en ? 'Reenviar al correo' : 'Enviar al correo del cliente')
         : null
     ),
     f.enviada_en ? h('div', { class: 'alerta info' }, `Enviada a ${f.cliente_correo} el ${fechaHora(f.enviada_en)}.`) : null,

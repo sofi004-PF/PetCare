@@ -1,8 +1,7 @@
 import { get } from '../api.js';
-import { h, reemplazar, encabezado } from '../ui.js';
+import { h, reemplazar, encabezado, botonVolver } from '../ui.js';
 import { PESTANAS_MASCOTA } from './pestanasMascota.js';
 
-const ICONOS_ESPECIE = { Canino: '🐶', Felino: '🐱', Ave: '🐦', Roedor: '🐹', Reptil: '🦎', Otro: '🐾' };
 
 /**
  * Ficha de una mascota (#/mascotas/:id/:pestaña). Reúne en pestañas la
@@ -11,7 +10,7 @@ const ICONOS_ESPECIE = { Canino: '🐶', Felino: '🐱', Ave: '🐦', Roedor: '�
 export default {
   id: 'mascotas',
   titulo: 'Ficha de la mascota',
-  icono: '🐾',
+  icono: 'huella',
   oculto: true,
   menu: 'propietarios',
 
@@ -27,9 +26,9 @@ export default {
     const area = h('div');
 
     reemplazar(contenedor,
-      encabezado(`${ICONOS_ESPECIE[mascota.especie] || '🐾'} ${mascota.nombre}`,
+      encabezado(mascota.nombre,
         `${mascota.especie}${mascota.raza ? ` · ${mascota.raza}` : ''} · Dueño: ${mascota.propietarioNombre}`,
-        h('a', { class: 'boton secundario', href: ctx.usuario.rol === 'cliente' ? '#/propietarios' : `#/propietarios/${mascota.propietarioId}` }, '← Volver')
+        botonVolver(ctx.usuario.rol === 'cliente' ? '#/propietarios' : `#/propietarios/${mascota.propietarioId}`)
       ),
       h('div', { class: 'pestanas', role: 'tablist' },
         pestanas.map((p) => h('button', {

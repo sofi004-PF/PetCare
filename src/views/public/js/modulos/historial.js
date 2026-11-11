@@ -1,5 +1,6 @@
 import { get, post } from '../api.js';
-import { h, reemplazar, aviso, abrirModal, formulario, tabla, encabezado, fechaHora, insignia, archivoABase64 } from '../ui.js';
+import { h, reemplazar, aviso, abrirModal, formulario, tabla, encabezado, fecha, fechaHora, insignia, archivoABase64, avatarEspecie, nuevoId, botonIcono } from '../ui.js';
+import { icono, grupoEspecie } from '../iconos.js';
 import { tarjetaRecordatoriosMascota } from './recordatorios.js';
 
 const COLOR_TIPO = {
@@ -16,39 +17,83 @@ const COLOR_TIPO = {
  * Búsqueda por nombre de la mascota o documento del dueño, línea de tiempo con
  * fecha, hora y veterinario de cada registro, y archivos adjuntos.
  */
+/** Filtros por tipo de mascota. */
+const FILTROS_ESPECIE = [
+  { id: 'todos', texto: 'Todos' },
+  { id: 'perros', texto: 'Perros' },
+  { id: 'gatos', texto: 'Gatos' },
+  { id: 'exoticos', texto: 'Exóticos' }
+];
+
 export default {
   id: 'historial',
-  titulo: 'Historial clínico',
-  icono: '📋',
-  descripcion: 'Expediente médico de cada paciente',
+  titulo: 'Pacientes',
+  icono: 'expediente',
+  descripcion: 'Historial clínico de cada mascota',
+  tituloPara: (rol) => (rol === 'cliente' ? 'Historial clínico' : null),
 
   async render(contenedor, ctx) {
+    const idBuscador = nuevoId('buscar');
     const buscador = h('input', {
+      id: idBuscador,
       type: 'search',
-      placeholder: ctx.usuario.rol === 'cliente' ? 'Buscar entre mis mascotas…' : 'Nombre de la mascota o documento del dueño…',
-      'aria-label': 'Buscar paciente'
+      autocomplete: 'off',
+      placeholder: ctx.usuario.rol === 'cliente' ? 'Nombre de la mascota' : 'Mascota o documento del dueño'
     });
-    const resultados = h('div');
-    const cargar = async () => {
-      const mascotas = await get(`/mascotas?q=${encodeURIComponent(buscador.value.trim())}`);
-      const filtradas = ctx.usuario.rol === 'cliente'
-        ? mascotas.filter((m) => m.nombre.toLowerCase().includes(buscador.value.trim().toLowerCase()))
-        : mascotas;
+    const resultados = h('div', { 'aria-live': 'polite' });
+    const chips = h('div', { class: 'chips', role: 'group', 'aria-label': 'Filtrar por tipo de mascota' });
+    let mascotas = [];
+    let filtro = 'todos';
+
+    const pintar = () => {
+      const conteos = { todos: mascotas.length, perros: 0, gatos: 0, exoticos: 0 };
+      mascotas.forEach((m) => { conteos[grupoEspecie(m.especie)] += 1; });
+      reemplazar(chips, FILTROS_ESPECIE.map((f) => h('button', {
+        type: 'button',
+        class: 'chip',
+        'aria-pressed': String(filtro === f.id),
+        onClick: () => { filtro = f.id; pintar(); }
+      }, f.texto, h('span', { class: 'conteo' }, String(conteos[f.id])))));
+
+      const visibles = filtro === 'todos' ? mascotas : mascotas.filter((m) => grupoEspecie(m.especie) === filtro);
       reemplazar(resultados, tabla([
-        { titulo: 'Mascota', valor: (m) => h('a', { href: `#/mascotas/${m.id}/historial` }, h('strong', {}, m.nombre)) },
+        {
+          titulo: 'Paciente',
+          valor: (m) => h('a', { class: 'celda-paciente', href: `#/mascotas/${m.id}/historial` },
+            avatarEspecie(m.especie), h('strong', {}, m.nombre))
+        },
         { titulo: 'Especie', valor: (m) => `${m.especie}${m.raza ? ` · ${m.raza}` : ''}` },
-        { titulo: 'Propietario', valor: (m) => (m.propietarioNombre ? `${m.propietarioNombre} (${m.propietarioDocumento})` : '—') },
+        { titulo: 'Sexo', valor: (m) => m.sexo || '—' },
+        { titulo: 'Nacimiento', valor: (m) => fecha(m.fechaNacimiento) },
+        { titulo: 'Propietario', valor: (m) => (m.propietarioNombre ? `${m.propietarioNombre} · ${m.propietarioDocumento}` : '—') },
         { titulo: '', valor: (m) => h('a', { class: 'boton pequeno secundario', href: `#/mascotas/${m.id}/historial` }, 'Ver historial') }
-      ], filtradas, 'No se encontraron pacientes'));
+      ], visibles, buscador.value.trim()
+        ? `Ningún paciente coincide con "${buscador.value.trim()}". Revise el nombre o el documento.`
+        : 'No hay pacientes de este tipo.'));
+    };
+
+    const cargar = async () => {
+      const texto = buscador.value.trim().toLowerCase();
+      const lista = await get(`/mascotas?q=${encodeURIComponent(buscador.value.trim())}`);
+      mascotas = ctx.usuario.rol === 'cliente' ? lista.filter((m) => m.nombre.toLowerCase().includes(texto)) : lista;
+      pintar();
     };
     let temporizador;
     buscador.addEventListener('input', () => { clearTimeout(temporizador); temporizador = setTimeout(cargar, 250); });
 
     reemplazar(contenedor,
-      encabezado('Historial clínico', 'Busque al paciente por el nombre de la mascota o el documento de identidad del dueño.'),
-      h('div', { class: 'tarjeta' }, h('div', { class: 'barra-filtros', style: 'margin-bottom:1rem' }, buscador), resultados)
+      encabezado(ctx.usuario.rol === 'cliente' ? 'Historial clínico' : 'Pacientes', 'Busque una mascota para abrir su historial clínico.'),
+      h('div', { class: 'tarjeta', style: 'display:flex;flex-direction:column;gap:1rem' },
+        h('div', { class: 'barra-filtros' },
+          h('div', { class: 'campo campo-busqueda' },
+            h('label', { for: idBuscador }, 'Buscar paciente'),
+            h('div', { class: 'buscador' }, icono('buscar', { tamano: 18 }), buscador)
+          )
+        ),
+        chips,
+        resultados
+      )
     );
-    buscador.focus();
     await cargar();
   }
 };
@@ -124,7 +169,7 @@ export const pestanaHistorial = {
         h('div', { class: 'tarjeta' },
           h('div', { class: 'titulo-pagina' },
             h('h2', {}, `Archivos adjuntos (${archivos.length})`),
-            esVeterinario ? h('button', { class: 'pequeno secundario', onClick: adjuntar }, '📎 Adjuntar') : null
+            esVeterinario ? botonIcono('clip', 'Adjuntar', { class: 'pequeno secundario', onClick: adjuntar }) : null
           ),
           tabla([
             { titulo: 'Archivo', valor: (a) => h('a', { href: `/api/historial/archivos/${a.id}`, target: '_blank', rel: 'noopener' }, a.nombre) },

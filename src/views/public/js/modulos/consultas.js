@@ -1,5 +1,6 @@
 import { get, post } from '../api.js';
-import { h, reemplazar, aviso, formulario, tabla, encabezado, listaDatos, fechaHora, hoy, insignia } from '../ui.js';
+import { h, reemplazar, aviso, formulario, tabla, encabezado, listaDatos, fechaHora, hoy, insignia, botonVolver, botonIcono } from '../ui.js';
+import { icono } from '../iconos.js';
 
 /**
  * HU-08: Registro de consultas veterinarias.
@@ -9,7 +10,7 @@ import { h, reemplazar, aviso, formulario, tabla, encabezado, listaDatos, fechaH
 export default {
   id: 'consultas',
   titulo: 'Consultas',
-  icono: '🩺',
+  icono: 'estetoscopio',
   descripcion: 'Atención clínica de los pacientes',
 
   async render(contenedor, ctx) {
@@ -54,7 +55,7 @@ async function renderLista(contenedor, ctx) {
 
   reemplazar(contenedor,
     encabezado('Consultas veterinarias', 'Registro de la atención clínica de cada paciente.',
-      esVeterinario ? h('a', { class: 'boton', href: '#/consultas/nueva' }, '+ Registrar consulta') : null
+      esVeterinario ? botonIcono('mas', 'Registrar consulta', { class: 'accion', href: '#/consultas/nueva' }) : null
     ),
     porAtender,
     h('div', { class: 'tarjeta' },
@@ -87,7 +88,7 @@ async function renderNueva(contenedor, ctx, mascotaId, citaId) {
         productos.map((p) => h('option', { value: p.id, disabled: p.stock === 0 }, `${p.nombre} (disponible: ${p.stock})`))
       ),
       h('input', { name: 'cantidad', type: 'number', min: '1', value: '1', 'aria-label': 'Cantidad', style: 'max-width:110px' }),
-      h('button', { type: 'button', class: 'secundario pequeno', 'aria-label': 'Quitar insumo', onClick: () => fila.remove() }, '✕')
+      h('button', { type: 'button', class: 'fantasma icono-solo', 'aria-label': 'Quitar insumo', onClick: () => fila.remove() }, icono('cerrar', { tamano: 18 }))
     );
     filasInsumos.append(fila);
   };
@@ -97,7 +98,7 @@ async function renderNueva(contenedor, ctx, mascotaId, citaId) {
 
   reemplazar(contenedor,
     encabezado(`Consulta de ${mascota.nombre}`, `${mascota.especie} · Dueño: ${mascota.propietarioNombre}`,
-      h('a', { class: 'boton secundario', href: '#/consultas' }, '← Volver')
+      botonVolver('#/consultas')
     ),
     productos.length ? h('div', { class: 'tarjeta' },
       h('div', { class: 'titulo-pagina' },
@@ -142,7 +143,7 @@ async function renderSeleccionPaciente(contenedor, ctx) {
   buscador.addEventListener('input', () => { clearTimeout(temporizador); temporizador = setTimeout(cargar, 250); });
 
   reemplazar(contenedor,
-    encabezado('Registrar consulta', 'Busque al paciente que va a atender.', h('a', { class: 'boton secundario', href: '#/consultas' }, '← Volver')),
+    encabezado('Registrar consulta', 'Busque al paciente que va a atender.', botonVolver('#/consultas')),
     h('div', { class: 'tarjeta' }, h('div', { class: 'barra-filtros', style: 'margin-bottom:1rem' }, buscador), resultados)
   );
   buscador.focus();

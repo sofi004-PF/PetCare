@@ -1,5 +1,6 @@
 import { get, post } from '../api.js';
 import { h, reemplazar, aviso, abrirModal, formulario, tabla, insignia, encabezado, fecha, fechaHora, hoy } from '../ui.js';
+import { icono, logotipo } from '../iconos.js';
 
 const COLOR_ESTADO = { Pendiente: 'alerta', Confirmado: 'exito', Cancelado: 'peligro' };
 
@@ -9,7 +10,7 @@ const COLOR_ESTADO = { Pendiente: 'alerta', Confirmado: 'exito', Cancelado: 'pel
 export default {
   id: 'recordatorios',
   titulo: 'Recordatorios',
-  icono: '💉',
+  icono: 'jeringa',
   descripcion: 'Vacunas y desparasitaciones programadas',
   tituloPara: (rol) => (rol === 'cliente' ? 'Mis recordatorios' : null),
 
@@ -40,7 +41,7 @@ export default {
     const lista = (await get('/recordatorios?estado=Pendiente')).filter((r) => r.fecha_programada >= hoy()).slice(0, 4);
     if (!lista.length) return null;
     return h('div', { class: 'tarjeta' },
-      h('div', { class: 'titulo-pagina' }, h('h2', {}, '💉 Próximas vacunas y desparasitaciones'), h('a', { href: '#/recordatorios' }, 'Ver todos')),
+      h('div', { class: 'titulo-pagina' }, h('h2', {}, 'Próximas vacunas y desparasitaciones'), h('a', { href: '#/recordatorios' }, 'Ver todos')),
       h('div', { class: 'linea-tiempo' }, lista.map((r) => h('div', { class: 'evento' },
         h('strong', {}, `${r.mascota_nombre}: ${r.descripcion}`),
         h('div', { class: 'meta' }, `${r.tipo} · ${fecha(r.fecha_programada)}${r.enviado_en ? ' · aviso enviado' : ''}`)
@@ -107,7 +108,7 @@ export async function tarjetaRecordatoriosMascota(mascota, ctx) {
 
   return h('div', { class: 'tarjeta', style: 'grid-column:1 / -1' },
     h('div', { class: 'titulo-pagina' },
-      h('h2', {}, '💉 Próximos recordatorios'),
+      h('h2', {}, 'Próximos recordatorios'),
       ctx.usuario.rol === 'veterinario' ? h('button', { class: 'pequeno', onClick: programar }, '+ Programar recordatorio') : null
     ),
     tablaRecordatorios(lista, ctx, false)
@@ -122,22 +123,25 @@ export async function tarjetaRecordatoriosMascota(mascota, ctx) {
  */
 export async function paginaResponder(raiz, token) {
   raiz.className = '';
-  const caja = h('div', { class: 'tarjeta caja-login' }, h('div', { class: 'logo' }, '🐾 PetCare'), h('p', { class: 'vacio' }, 'Cargando…'));
-  reemplazar(raiz, h('div', { class: 'pantalla-login' }, caja));
+  raiz.removeAttribute('aria-busy');
+  document.title = 'Recordatorio · PetCare';
+  const marca = () => h('div', { class: 'marca' }, logotipo(40), h('span', { class: 'marca-nombre' }, 'PetCare'));
+  const caja = h('div', { class: 'tarjeta' }, marca(), h('p', { class: 'vacio', role: 'status' }, 'Cargando…'));
+  reemplazar(raiz, h('main', { class: 'pantalla-centrada' }, caja));
 
   const pintar = (r, mensaje = null) => {
     reemplazar(caja,
-      h('div', { class: 'logo' }, '🐾 PetCare'),
-      h('h2', { style: 'text-align:center' }, `${r.tipo} de ${r.mascota}`),
-      h('p', { style: 'text-align:center' }, `${r.descripcion} · ${fecha(r.fechaProgramada)}`),
-      h('p', { style: 'text-align:center' }, 'Estado: ', insignia(r.estado, COLOR_ESTADO[r.estado])),
-      mensaje ? h('div', { class: 'alerta info' }, mensaje) : null,
+      marca(),
+      h('h1', { style: 'font-size:var(--t-lg)' }, `${r.tipo} de ${r.mascota}`),
+      h('p', { style: 'margin:0 auto' }, `${r.descripcion} · ${fecha(r.fechaProgramada)}`),
+      h('p', { style: 'margin:0 auto' }, insignia(r.estado, COLOR_ESTADO[r.estado])),
+      mensaje ? h('div', { class: 'alerta exito', role: 'status' }, icono('correcto'), h('div', {}, mensaje)) : null,
       r.estado === 'Pendiente'
         ? h('div', { class: 'acciones', style: 'justify-content:center' },
-          h('button', { onClick: () => enviar('confirmar') }, 'Confirmar asistencia'),
-          h('button', { class: 'peligro', onClick: () => enviar('cancelar') }, 'Cancelar'))
+          h('button', { class: 'accion', onClick: () => enviar('confirmar') }, 'Confirmar asistencia'),
+          h('button', { class: 'secundario', onClick: () => enviar('cancelar') }, 'No podré asistir'))
         : null,
-      h('a', { href: '#/inicio', style: 'text-align:center' }, 'Ir a PetCare')
+      h('a', { href: '#/inicio' }, 'Ir a PetCare')
     );
   };
 
@@ -153,6 +157,6 @@ export async function paginaResponder(raiz, token) {
   try {
     pintar(await get(`/publico/recordatorios/${token}`));
   } catch (error) {
-    reemplazar(caja, h('div', { class: 'logo' }, '🐾 PetCare'), h('div', { class: 'alerta peligro' }, error.message));
+    reemplazar(caja, marca(), h('div', { class: 'alerta peligro', role: 'alert' }, icono('alerta'), h('div', {}, error.message)));
   }
 }

@@ -1,5 +1,6 @@
 import { get, post } from '../api.js';
-import { h, reemplazar, aviso, tabla, encabezado, listaDatos, fechaHora } from '../ui.js';
+import { h, reemplazar, aviso, tabla, encabezado, listaDatos, fechaHora, botonVolver, botonIcono } from '../ui.js';
+import { icono } from '../iconos.js';
 
 /**
  * HU-06: Emisión de recetas médicas digitales.
@@ -9,7 +10,7 @@ import { h, reemplazar, aviso, tabla, encabezado, listaDatos, fechaHora } from '
 export default {
   id: 'recetas',
   titulo: 'Recetas',
-  icono: '🧾',
+  icono: 'receta',
   descripcion: 'Recetas médicas en PDF',
   tituloPara: (rol) => (rol === 'cliente' ? 'Mis recetas' : null),
 
@@ -36,7 +37,7 @@ async function renderLista(contenedor, ctx) {
   const recetas = await get('/recetas');
   reemplazar(contenedor,
     encabezado(ctx.usuario.rol === 'cliente' ? 'Mis recetas' : 'Recetas médicas', 'Recetas digitales emitidas, disponibles en PDF.',
-      ctx.usuario.rol === 'veterinario' ? h('a', { class: 'boton', href: '#/recetas/nueva' }, '+ Nueva receta') : null
+      ctx.usuario.rol === 'veterinario' ? botonIcono('mas', 'Nueva receta', { class: 'accion', href: '#/recetas/nueva' }) : null
     ),
     h('div', { class: 'tarjeta' }, tablaRecetas(recetas))
   );
@@ -50,7 +51,7 @@ async function renderNueva(contenedor, ctx, mascotaId) {
   if (!mascotaId) {
     const mascotas = await get('/mascotas');
     reemplazar(contenedor,
-      encabezado('Nueva receta', 'Seleccione el paciente.', h('a', { class: 'boton secundario', href: '#/recetas' }, '← Volver')),
+      encabezado('Nueva receta', 'Seleccione el paciente.', botonVolver('#/recetas')),
       h('div', { class: 'tarjeta' }, tabla([
         { titulo: 'Mascota', valor: (m) => h('strong', {}, m.nombre) },
         { titulo: 'Especie', valor: (m) => m.especie },
@@ -70,7 +71,7 @@ async function renderNueva(contenedor, ctx, mascotaId) {
       h('div', { class: 'campo' }, h('label', {}, 'Dosis *'), h('input', { name: 'dosis', required: true, placeholder: 'Ej: 1 tableta' })),
       h('div', { class: 'campo' }, h('label', {}, 'Frecuencia *'), h('input', { name: 'frecuencia', required: true, placeholder: 'Cada 8 horas' })),
       h('div', { class: 'campo' }, h('label', {}, 'Duración *'), h('input', { name: 'duracion', required: true, placeholder: '5 días' })),
-      h('button', { type: 'button', class: 'secundario pequeno', 'aria-label': 'Quitar medicamento', onClick: () => { if (filas.children.length > 1) fila.remove(); } }, '✕')
+      h('button', { type: 'button', class: 'fantasma icono-solo', 'aria-label': 'Quitar medicamento', onClick: () => { if (filas.children.length > 1) fila.remove(); } }, icono('cerrar', { tamano: 18 }))
     );
     filas.append(fila);
   };
@@ -81,7 +82,7 @@ async function renderNueva(contenedor, ctx, mascotaId) {
     h('option', { value: 'whatsapp' }, `WhatsApp (${datos.propietario.telefono})`)
   );
   const observaciones = h('textarea', { id: 'receta-observaciones', placeholder: 'Indicaciones adicionales para el cliente' });
-  const boton = h('button', { type: 'submit' }, 'Emitir y enviar receta');
+  const boton = h('button', { type: 'submit', class: 'accion' }, 'Emitir y enviar receta');
 
   const form = h('form', {
     onSubmit: async (evento) => {
@@ -116,7 +117,7 @@ async function renderNueva(contenedor, ctx, mascotaId) {
 
   reemplazar(contenedor,
     encabezado(`Receta para ${datos.paciente.nombre}`, 'Los datos del paciente y del veterinario se completan automáticamente.',
-      h('a', { class: 'boton secundario', href: `#/mascotas/${datos.paciente.id}/recetas` }, '← Volver')
+      botonVolver(`#/mascotas/${datos.paciente.id}/recetas`)
     ),
     h('div', { class: 'rejilla-2' },
       h('div', { class: 'tarjeta' }, h('h2', {}, 'Paciente'), listaDatos([
@@ -138,8 +139,8 @@ async function renderDetalle(contenedor, id) {
   const r = await get(`/recetas/${id}`);
   reemplazar(contenedor,
     encabezado(`Receta ${r.numero}`, `${r.mascota_nombre} · ${fechaHora(r.creado_en)}`,
-      h('a', { class: 'boton secundario', href: `#/mascotas/${r.mascota_id}/recetas` }, '← Volver'),
-      h('a', { class: 'boton', href: `/api/recetas/${r.id}/pdf`, target: '_blank', rel: 'noopener' }, '⬇ Descargar PDF')
+      botonVolver(`#/mascotas/${r.mascota_id}/recetas`),
+      botonIcono('descargar', 'Descargar PDF', { href: `/api/recetas/${r.id}/pdf`, target: '_blank', rel: 'noopener' })
     ),
     h('div', { class: 'tarjeta documento' },
       listaDatos([

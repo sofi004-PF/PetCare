@@ -7,7 +7,7 @@ import { h, reemplazar, aviso, abrirModal, formulario, tabla, encabezado, fechaH
 export default {
   id: 'tratamientos',
   titulo: 'Tratamientos',
-  icono: '💊',
+  icono: 'pildora',
   descripcion: 'Seguimiento de tratamientos activos',
 
   async render(contenedor, ctx) {

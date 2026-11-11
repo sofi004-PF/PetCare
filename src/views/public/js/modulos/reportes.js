@@ -1,5 +1,5 @@
 import { get } from '../api.js';
-import { h, reemplazar, aviso, tabla, encabezado, moneda } from '../ui.js';
+import { h, reemplazar, aviso, tabla, encabezado, moneda, botonIcono } from '../ui.js';
 
 /** Filtros disponibles por tipo de reporte. */
 const FILTROS = {
@@ -17,7 +17,7 @@ const FILTROS = {
 export default {
   id: 'reportes',
   titulo: 'Reportes',
-  icono: '📊',
+  icono: 'grafico',
   descripcion: 'Indicadores para la toma de decisiones',
 
   async render(contenedor, ctx) {
@@ -39,7 +39,7 @@ export default {
     const filtrosVisibles = FILTROS[tipo] || [];
 
     const resultado = h('div', { style: 'display:flex;flex-direction:column;gap:1rem' });
-    const descarga = h('a', { class: 'boton secundario', href: '#', download: '' }, '⬇ Descargar CSV (Excel)');
+    const descarga = botonIcono('descargar', 'Descargar CSV (Excel)', { class: 'secundario', href: '#', download: '' });
 
     const parametros = () => {
       const p = new URLSearchParams();
@@ -63,7 +63,7 @@ export default {
     reemplazar(contenedor,
       encabezado('Reportes administrativos y clínicos', 'Elija el reporte, aplique los filtros y descárguelo para analizarlo.',
         descarga,
-        h('button', { class: 'secundario no-imprimir', onClick: () => window.print() }, '🖨 Imprimir / PDF')
+        botonIcono('imprimir', 'Imprimir', { class: 'secundario no-imprimir', onClick: () => window.print() })
       ),
       h('div', { class: 'pestanas no-imprimir', role: 'tablist' },
         tipos.map((t) => h('button', { type: 'button', role: 'tab', class: t.id === tipo ? 'activa' : '', 'aria-selected': String(t.id === tipo), onClick: () => ctx.ir(`#/reportes/${t.id}`) }, t.nombre))
@@ -75,7 +75,7 @@ export default {
           filtrosVisibles.includes('servicio') ? campo('Tipo de servicio', 'rep-servicio', controles.servicioId) : null,
           filtrosVisibles.includes('estadoCita') || filtrosVisibles.includes('estadoStock') ? campo('Estado', 'rep-estado', controles.estado) : null,
           filtrosVisibles.includes('especie') ? campo('Especie', 'rep-especie', controles.especie) : null,
-          h('button', { onClick: generar }, 'Generar reporte')
+          h('button', { class: 'accion', onClick: generar }, 'Generar reporte')
         )
       ),
       resultado
