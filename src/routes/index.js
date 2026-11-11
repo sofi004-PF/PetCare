@@ -16,6 +16,7 @@ function registrarRutas(app) {
   app.use('/api/tratamientos', require('./tratamientoRoutes'));
   app.use('/api/recetas', require('./recetaRoutes'));
   app.use('/api/recordatorios', require('./recordatorioRoutes'));
+  app.use('/api/inventario', require('./inventarioRoutes'));
 }
 
 module.exports = { registrarRutas };

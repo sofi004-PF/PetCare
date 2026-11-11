@@ -17,6 +17,7 @@ function sembrarDatos() {
   controladores.tratamientos.sembrar(veterinario);
   controladores.recetas.sembrar(veterinario);
   controladores.recordatorios.sembrar(veterinario);
+  controladores.inventario.sembrar(controladores.citas.usuarioDAO.obtenerPorRol('administrador')[0]);
 }
 
 module.exports = { sembrarDatos, PASSWORD_PRUEBA };

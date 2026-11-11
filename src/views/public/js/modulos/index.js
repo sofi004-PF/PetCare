@@ -10,6 +10,7 @@ import historial from './historial.js';
 import tratamientos from './tratamientos.js';
 import recetas from './recetas.js';
 import recordatorios from './recordatorios.js';
+import inventario from './inventario.js';
 import propietarios from './propietarios.js';
 import mascota from './mascota.js';
 import notificaciones from './notificaciones.js';
@@ -26,5 +27,6 @@ export const MODULOS = [
   propietarios,
   mascota,
   notificaciones,
+  inventario,
   usuarios
 ];

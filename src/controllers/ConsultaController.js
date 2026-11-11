@@ -11,22 +11,26 @@ class ConsultaController {
   /**
    * @param {import('./PropietarioController')} propietarioController - Validación de mascotas.
    * @param {import('./CitaController')} citaController - Para marcar la cita como atendida.
+   * @param {import('./InventarioController')} [inventarioController] - Para descontar los insumos usados (HU-04).
    */
-  constructor(propietarioController, citaController) {
+  constructor(propietarioController, citaController, inventarioController = null) {
     this.consultaDAO = new ConsultaDAO();
     this.propietarios = propietarioController;
     this.citas = citaController;
+    this.inventario = inventarioController;
   }
 
   /**
    * Contrato: Registra una consulta realizada por el veterinario autenticado.
    * @param {{mascotaId: number, citaId?: number, motivo: string, sintomas: string, diagnostico: string,
-   *          observaciones?: string, pesoKg?: number, temperaturaC?: number}} datos
+   *          observaciones?: string, pesoKg?: number, temperaturaC?: number,
+   *          insumos?: Array<{productoId: number, cantidad: number}>}} datos
+   *        Los insumos usados se descuentan automáticamente del inventario (HU-04).
    * @param {{id: number, rol: string}} veterinario - Usuario que atiende.
    * @returns {import('../models/Consulta')} Consulta registrada con fecha y hora automáticas.
-   * @throws {ErrorNegocio} Si faltan datos, la mascota no existe o la cita no corresponde a la mascota.
+   * @throws {ErrorNegocio} Si faltan datos, la mascota no existe, la cita no corresponde o no hay stock.
    */
-  registrar({ mascotaId, citaId, motivo, sintomas, diagnostico, observaciones, pesoKg, temperaturaC }, veterinario) {
+  registrar({ mascotaId, citaId, motivo, sintomas, diagnostico, observaciones, pesoKg, temperaturaC, insumos = [] }, veterinario) {
     exigir(veterinario.rol === 'veterinario', 'Solo un veterinario puede registrar consultas', 403);
     exigirCampos({ mascotaId, motivo, sintomas, diagnostico },
       { mascotaId: 'mascota', motivo: 'motivo de consulta', sintomas: 'síntomas', diagnostico: 'diagnóstico' });
@@ -41,7 +45,7 @@ class ConsultaController {
         exigir(cita.mascotaId === mascota.id, 'La cita no corresponde a esta mascota');
         this.citas.marcarAtendida(cita.id);
       }
-      return this.consultaDAO.guardar({
+      const consulta = this.consultaDAO.guardar({
         mascotaId: mascota.id,
         veterinarioId: veterinario.id,
         citaId: citaId ? Number(citaId) : null,
@@ -52,6 +56,16 @@ class ConsultaController {
         pesoKg: peso,
         temperaturaC: temperatura
       });
+      if (this.inventario && Array.isArray(insumos)) {
+        for (const insumo of insumos.filter((i) => i && i.productoId)) {
+          this.inventario.descontar(insumo.productoId, insumo.cantidad, {
+            motivo: 'Uso en consulta',
+            referencia: `Consulta #${consulta.id} (${mascota.nombre})`,
+            usuarioId: veterinario.id
+          });
+        }
+      }
+      return consulta;
     });
   }
 
