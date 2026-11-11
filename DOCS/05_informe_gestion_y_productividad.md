@@ -33,8 +33,8 @@ Cumplimiento = (V_real / V_planeada) × 100% = (2 / 12) × 100% ≈ 16.6%
 
 ### Gráfico Burn-up
 
-> **[Insertar captura de pantalla extraída de GitHub Insights]**
->
+![Gráfico Burn-up del Sprint 1 extraído de GitHub Insights](img/burnup_sprint1.png)
+
 > Gráfico **"Burn-up Sprint 1"** configurado en *Projects → Insights*: **Eje X** = *Iteration*; **Agrupación (Group by)** = *Status*; **Eje Y** = suma del campo *Story Points*; **Tipo** = columnas apiladas; **Filtro** = `iteration:"Sprint 1"`.
 
 **Lectura del gráfico:** la columna del Sprint 1 alcanza **12 SP**, que corresponden al alcance total comprometido en la planeación. Esa columna se divide en dos segmentos según el estado de las historias al cierre:
