@@ -12,6 +12,7 @@ import recetas from './recetas.js';
 import recordatorios from './recordatorios.js';
 import inventario from './inventario.js';
 import facturas from './facturas.js';
+import reportes from './reportes.js';
 import propietarios from './propietarios.js';
 import mascota from './mascota.js';
 import notificaciones from './notificaciones.js';
@@ -30,5 +31,6 @@ export const MODULOS = [
   notificaciones,
   facturas,
   inventario,
+  reportes,
   usuarios
 ];
