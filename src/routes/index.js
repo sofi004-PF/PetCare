@@ -5,6 +5,7 @@
  */
 function registrarRutas(app) {
   app.use('/api/auth', require('./authRoutes'));
+  app.use('/api/publico', require('./publicoRoutes'));
   app.use('/api/usuarios', require('./usuarioRoutes'));
   app.use('/api/propietarios', require('./propietarioRoutes'));
   app.use('/api/mascotas', require('./mascotaRoutes'));
@@ -14,6 +15,7 @@ function registrarRutas(app) {
   app.use('/api/historial', require('./historialRoutes'));
   app.use('/api/tratamientos', require('./tratamientoRoutes'));
   app.use('/api/recetas', require('./recetaRoutes'));
+  app.use('/api/recordatorios', require('./recordatorioRoutes'));
 }
 
 module.exports = { registrarRutas };

@@ -68,3 +68,4 @@ Todos usan la contraseña **`PetCare2026*`**.
 | HU-02 Registro de historial clínico por paciente | #11 | Historial clínico: línea de tiempo y archivos adjuntos |
 | HU-09 Registro y seguimiento de tratamientos | #18 | Tratamientos: actuales, anteriores y evolución |
 | HU-06 Emisión de recetas médicas digitales | #15 | Recetas: PDF y envío por correo o WhatsApp |
+| HU-03 Notificaciones automáticas de vacunación y desparasitación | #12 | Recordatorios: aviso 3 días antes y respuesta desde el mensaje |

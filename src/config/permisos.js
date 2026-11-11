@@ -25,7 +25,8 @@ const PERMISOS = {
   consultas: ['administrador', 'veterinario'],
   historial: ['administrador', 'veterinario', 'cliente'],
   tratamientos: ['administrador', 'veterinario', 'cliente'],
-  recetas: ['administrador', 'veterinario', 'cliente']
+  recetas: ['administrador', 'veterinario', 'cliente'],
+  recordatorios: ['administrador', 'veterinario', 'recepcionista', 'cliente']
 };
 
 /**

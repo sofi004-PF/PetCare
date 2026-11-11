@@ -1,5 +1,6 @@
 import { get, post } from '../api.js';
 import { h, reemplazar, aviso, abrirModal, formulario, tabla, encabezado, fechaHora, insignia, archivoABase64 } from '../ui.js';
+import { tarjetaRecordatoriosMascota } from './recordatorios.js';
 
 const COLOR_TIPO = {
   Consulta: 'info',
@@ -60,7 +61,9 @@ export const pestanaHistorial = {
   titulo: 'Historial clínico',
   visible: (ctx) => ctx.puede('historial'),
   async render(contenedor, mascota, ctx) {
-    const [{ eventos, archivos }, tipos] = await Promise.all([get(`/historial/${mascota.id}`), get('/historial/tipos')]);
+    const [{ eventos, archivos }, tipos, recordatorios] = await Promise.all([
+      get(`/historial/${mascota.id}`), get('/historial/tipos'), tarjetaRecordatoriosMascota(mascota, ctx)
+    ]);
     const esVeterinario = ctx.usuario.rol === 'veterinario';
 
     const nuevaEntrada = () => {
@@ -103,6 +106,7 @@ export const pestanaHistorial = {
 
     reemplazar(contenedor,
       h('div', { class: 'rejilla-2' },
+        recordatorios,
         h('div', { class: 'tarjeta' },
           h('div', { class: 'titulo-pagina' },
             h('h2', {}, 'Línea de tiempo clínica'),
