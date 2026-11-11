@@ -11,6 +11,7 @@ function sembrarDatos() {
   controladores.usuarios.sembrar(PASSWORD_PRUEBA);
   controladores.propietarios.sembrar(PASSWORD_PRUEBA);
   controladores.citas.sembrar();
+  controladores.consultas.sembrar();
 }
 
 module.exports = { sembrarDatos, PASSWORD_PRUEBA };

@@ -10,6 +10,7 @@ function registrarRutas(app) {
   app.use('/api/mascotas', require('./mascotaRoutes'));
   app.use('/api/citas', require('./citaRoutes'));
   app.use('/api/notificaciones', require('./notificacionRoutes'));
+  app.use('/api/consultas', require('./consultaRoutes'));
 }
 
 module.exports = { registrarRutas };

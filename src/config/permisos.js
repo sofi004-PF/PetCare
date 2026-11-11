@@ -21,7 +21,8 @@ const PERMISOS = {
   propietarios: TODOS,
   mascotas: TODOS,
   citas: TODOS,
-  notificaciones: ['administrador', 'recepcionista', 'cliente']
+  notificaciones: ['administrador', 'recepcionista', 'cliente'],
+  consultas: ['administrador', 'veterinario']
 };
 
 /**
