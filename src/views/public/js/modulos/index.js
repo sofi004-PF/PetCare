@@ -8,6 +8,7 @@ import citas from './citas.js';
 import consultas from './consultas.js';
 import historial from './historial.js';
 import tratamientos from './tratamientos.js';
+import recetas from './recetas.js';
 import propietarios from './propietarios.js';
 import mascota from './mascota.js';
 import notificaciones from './notificaciones.js';
@@ -19,6 +20,7 @@ export const MODULOS = [
   consultas,
   historial,
   tratamientos,
+  recetas,
   propietarios,
   mascota,
   notificaciones,

@@ -5,6 +5,7 @@ const CitaController = require('./CitaController');
 const ConsultaController = require('./ConsultaController');
 const HistorialController = require('./HistorialController');
 const TratamientoController = require('./TratamientoController');
+const RecetaController = require('./RecetaController');
 
 /**
  * Registro único de controladores (fachadas) de PetCare.
@@ -19,6 +20,8 @@ const historial = new HistorialController(propietarios);
 const tratamientos = new TratamientoController(propietarios);
 historial.registrarFuente((mascotaId) => consultas.eventosHistorial(mascotaId));
 historial.registrarFuente((mascotaId) => tratamientos.eventosHistorial(mascotaId));
+const recetas = new RecetaController(propietarios, notificaciones);
+historial.registrarFuente((mascotaId) => recetas.eventosHistorial(mascotaId));
 
 const controladores = {
   usuarios,
@@ -27,7 +30,8 @@ const controladores = {
   citas,
   consultas,
   historial,
-  tratamientos
+  tratamientos,
+  recetas
 };
 
 module.exports = controladores;

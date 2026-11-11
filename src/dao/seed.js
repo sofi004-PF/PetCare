@@ -15,6 +15,7 @@ function sembrarDatos() {
   const veterinario = controladores.citas.usuarioDAO.obtenerPorRol('veterinario')[0];
   controladores.historial.sembrar(veterinario);
   controladores.tratamientos.sembrar(veterinario);
+  controladores.recetas.sembrar(veterinario);
 }
 
 module.exports = { sembrarDatos, PASSWORD_PRUEBA };

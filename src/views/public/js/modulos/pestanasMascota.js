@@ -5,6 +5,7 @@ import { pestanaCitas } from './citas.js';
 import { pestanaConsultas } from './consultas.js';
 import { pestanaHistorial } from './historial.js';
 import { pestanaTratamientos } from './tratamientos.js';
+import { pestanaRecetas } from './recetas.js';
 
 /**
  * Pestañas de la ficha de una mascota. Cada historia de usuario agrega aquí
@@ -45,6 +46,7 @@ export const PESTANAS_MASCOTA = [
   pestanaHistorial,
   pestanaConsultas,
   pestanaTratamientos,
+  pestanaRecetas,
   pestanaCitas
 ];
 
