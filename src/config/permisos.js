@@ -19,7 +19,9 @@ const PERMISOS = {
   inicio: TODOS,
   usuarios: ['administrador'],
   propietarios: TODOS,
-  mascotas: TODOS
+  mascotas: TODOS,
+  citas: TODOS,
+  notificaciones: ['administrador', 'recepcionista', 'cliente']
 };
 
 /**

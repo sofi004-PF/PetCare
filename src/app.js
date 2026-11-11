@@ -26,6 +26,9 @@ function crearApp() {
     if (error instanceof ErrorNegocio) {
       return res.status(error.estado).json({ error: error.message });
     }
+    if (error.code === 'ERR_SQLITE_ERROR' && /UNIQUE constraint/.test(error.message)) {
+      return res.status(409).json({ error: 'El registro ya existe o el horario ya está ocupado' });
+    }
     if (error.type === 'entity.too.large') {
       return res.status(413).json({ error: 'El archivo es demasiado grande (máximo 10 MB)' });
     }

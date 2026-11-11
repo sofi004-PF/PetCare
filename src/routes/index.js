@@ -8,6 +8,8 @@ function registrarRutas(app) {
   app.use('/api/usuarios', require('./usuarioRoutes'));
   app.use('/api/propietarios', require('./propietarioRoutes'));
   app.use('/api/mascotas', require('./mascotaRoutes'));
+  app.use('/api/citas', require('./citaRoutes'));
+  app.use('/api/notificaciones', require('./notificacionRoutes'));
 }
 
 module.exports = { registrarRutas };
