@@ -35,14 +35,14 @@ Cumplimiento = (V_real / V_planeada) × 100% = (2 / 12) × 100% ≈ 16.6%
 
 > **[Insertar captura de pantalla extraída de GitHub Insights]**
 >
-> Configuración usada en *Projects → Insights*: **Eje Y (Burn up by)** = suma del campo *Story Points*; **Eje X (Group by)** = *Iteration*.
+> Gráfico **"Burn-up Sprint 1"** configurado en *Projects → Insights*: **Eje X** = *Iteration*; **Agrupación (Group by)** = *Status*; **Eje Y** = suma del campo *Story Points*; **Tipo** = columnas apiladas; **Filtro** = `iteration:"Sprint 1"`.
 
-**Lectura del gráfico:** el Burn-up muestra dos líneas:
+**Lectura del gráfico:** la columna del Sprint 1 alcanza **12 SP**, que corresponden al alcance total comprometido en la planeación. Esa columna se divide en dos segmentos según el estado de las historias al cierre:
 
-* **Alcance total (línea superior):** se mantiene plana en **12 SP** durante todo el Sprint 1, porque no se añadieron ni retiraron historias después de la planeación.
-* **Trabajo completado (línea inferior):** permanece en **0 SP** hasta el **4 de noviembre de 2026**, cuando se fusiona el PR #21 y la HU03 pasa a *Done*; en ese momento la línea sube a **2 SP** y no vuelve a crecer antes del cierre.
+* **Done (segmento inferior): 2 SP.** Corresponde a la HU03, que cumplió la *Definition of Done* al fusionarse el PR #21 el **4 de noviembre de 2026**. Es la **velocidad real** del Sprint.
+* **In progress (segmento superior): 10 SP.** Corresponde a la HU01, que se inició pero no se terminó dentro del Sprint.
 
-La brecha final entre ambas líneas (**10 SP**) corresponde a la HU01, que no alcanzó la *Definition of Done*.
+La proporción entre ambos segmentos refleja directamente el porcentaje de cumplimiento: solo **2 de los 12 SP** planeados (≈16.6%) llegaron a *Done*. Los **10 SP** restantes (HU01) son la brecha entre lo planeado y lo entregado.
 
 ### Análisis de Desviaciones
 
