@@ -35,7 +35,10 @@ export default {
       permitidos.filter((m) => typeof m.widgetInicio === 'function').map((m) => m.widgetInicio(ctx))
     );
     for (const resultado of resultados) {
-      if (resultado.status === 'fulfilled' && resultado.value) widgets.append(resultado.value);
+      if (resultado.status !== 'fulfilled' || !resultado.value) continue;
+      // Las alertas (por ejemplo, stock bajo) se muestran primero
+      if (resultado.value.classList.contains('alerta')) widgets.prepend(resultado.value);
+      else widgets.append(resultado.value);
     }
   }
 };

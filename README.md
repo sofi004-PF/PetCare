@@ -69,3 +69,4 @@ Todos usan la contraseña **`PetCare2026*`**.
 | HU-09 Registro y seguimiento de tratamientos | #18 | Tratamientos: actuales, anteriores y evolución |
 | HU-06 Emisión de recetas médicas digitales | #15 | Recetas: PDF y envío por correo o WhatsApp |
 | HU-03 Notificaciones automáticas de vacunación y desparasitación | #12 | Recordatorios: aviso 3 días antes y respuesta desde el mensaje |
+| HU-04 Control de inventario de farmacia veterinaria | #13 | Inventario: lotes, caducidad, descuento automático y alertas |

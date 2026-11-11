@@ -72,15 +72,41 @@ async function renderNueva(contenedor, ctx, mascotaId, citaId) {
   }
   if (!mascotaId) return renderSeleccionPaciente(contenedor, ctx);
 
-  const [mascota, cita] = await Promise.all([
+  const [mascota, cita, productos] = await Promise.all([
     get(`/mascotas/${mascotaId}`),
-    citaId ? get(`/citas/${citaId}`) : Promise.resolve(null)
+    citaId ? get(`/citas/${citaId}`) : Promise.resolve(null),
+    get('/inventario/productos').catch(() => [])
   ]);
+
+  // Insumos y medicamentos usados en la consulta: se descuentan del inventario (HU-04)
+  const filasInsumos = h('div', { style: 'display:flex;flex-direction:column;gap:0.5rem' });
+  const agregarInsumo = () => {
+    const fila = h('div', { class: 'acciones fila-insumo' },
+      h('select', { name: 'productoId', 'aria-label': 'Insumo', style: 'max-width:340px' },
+        h('option', { value: '' }, 'Seleccione el insumo…'),
+        productos.map((p) => h('option', { value: p.id, disabled: p.stock === 0 }, `${p.nombre} (disponible: ${p.stock})`))
+      ),
+      h('input', { name: 'cantidad', type: 'number', min: '1', value: '1', 'aria-label': 'Cantidad', style: 'max-width:110px' }),
+      h('button', { type: 'button', class: 'secundario pequeno', 'aria-label': 'Quitar insumo', onClick: () => fila.remove() }, '✕')
+    );
+    filasInsumos.append(fila);
+  };
+  const leerInsumos = () => [...filasInsumos.querySelectorAll('.fila-insumo')]
+    .map((f) => ({ productoId: f.querySelector('[name=productoId]').value, cantidad: Number(f.querySelector('[name=cantidad]').value) }))
+    .filter((i) => i.productoId);
 
   reemplazar(contenedor,
     encabezado(`Consulta de ${mascota.nombre}`, `${mascota.especie} · Dueño: ${mascota.propietarioNombre}`,
       h('a', { class: 'boton secundario', href: '#/consultas' }, '← Volver')
     ),
+    productos.length ? h('div', { class: 'tarjeta' },
+      h('div', { class: 'titulo-pagina' },
+        h('h2', {}, 'Insumos y medicamentos usados'),
+        h('button', { type: 'button', class: 'secundario pequeno', onClick: agregarInsumo }, '+ Agregar insumo')
+      ),
+      h('p', { class: 'ayuda' }, 'Se descontarán automáticamente del inventario al registrar la consulta.'),
+      filasInsumos
+    ) : null,
     h('div', { class: 'tarjeta' },
       h('p', { class: 'ayuda' }, `Veterinario responsable: ${ctx.usuario.nombre}. La fecha y hora se registran automáticamente al guardar.`),
       cita ? h('p', {}, 'Atendiendo la cita ', insignia(cita.codigo, 'info'), ` de las ${cita.hora} (${cita.servicioNombre}).`) : null,
@@ -92,7 +118,7 @@ async function renderNueva(contenedor, ctx, mascotaId, citaId) {
         { nombre: 'diagnostico', etiqueta: 'Diagnóstico', tipo: 'textarea', requerido: true, ancho: 'completo' },
         { nombre: 'observaciones', etiqueta: 'Observaciones', tipo: 'textarea', ancho: 'completo' }
       ], async (datos) => {
-        await post('/consultas', { ...datos, mascotaId: mascota.id, citaId: cita ? cita.id : null });
+        await post('/consultas', { ...datos, mascotaId: mascota.id, citaId: cita ? cita.id : null, insumos: leerInsumos() });
         aviso('Consulta registrada', 'exito');
         ctx.ir(`#/mascotas/${mascota.id}/consultas`);
       }, { textoBoton: 'Registrar consulta' })
