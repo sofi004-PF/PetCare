@@ -63,3 +63,4 @@ Todos usan la contraseña **`PetCare2026*`**.
 | :--- | :---: | :--- |
 | HU-11 Gestión de usuarios y roles | #20 | Usuarios y roles, inicio de sesión y permisos |
 | HU-07 Registro y gestión de propietarios | #16 | Propietarios, mascotas y acceso del cliente |
+| HU-01 Agendamiento de citas médicas en línea | #10 | Citas: calendario, servicios, confirmación por correo |

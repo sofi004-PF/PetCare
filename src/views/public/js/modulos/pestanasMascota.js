@@ -1,6 +1,7 @@
 import { get, put } from '../api.js';
 import { h, reemplazar, aviso, abrirModal, listaDatos, fecha } from '../ui.js';
 import { formularioMascota } from './propietarios.js';
+import { pestanaCitas } from './citas.js';
 
 /**
  * Pestañas de la ficha de una mascota. Cada historia de usuario agrega aquí
@@ -37,7 +38,8 @@ export const PESTANAS_MASCOTA = [
         ])
       ));
     }
-  }
+  },
+  pestanaCitas
 ];
 
 /**

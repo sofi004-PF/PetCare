@@ -10,6 +10,7 @@ const PASSWORD_PRUEBA = 'PetCare2026*';
 function sembrarDatos() {
   controladores.usuarios.sembrar(PASSWORD_PRUEBA);
   controladores.propietarios.sembrar(PASSWORD_PRUEBA);
+  controladores.citas.sembrar();
 }
 
 module.exports = { sembrarDatos, PASSWORD_PRUEBA };

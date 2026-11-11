@@ -1,5 +1,7 @@
 const UsuarioController = require('./UsuarioController');
 const PropietarioController = require('./PropietarioController');
+const NotificacionController = require('./NotificacionController');
+const CitaController = require('./CitaController');
 
 /**
  * Registro único de controladores (fachadas) de PetCare.
@@ -7,10 +9,14 @@ const PropietarioController = require('./PropietarioController');
  */
 const usuarios = new UsuarioController();
 const propietarios = new PropietarioController(usuarios);
+const notificaciones = new NotificacionController();
+const citas = new CitaController(propietarios, notificaciones);
 
 const controladores = {
   usuarios,
-  propietarios
+  propietarios,
+  notificaciones,
+  citas
 };
 
 module.exports = controladores;
