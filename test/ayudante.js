@@ -3,6 +3,7 @@
  * temporal con sesiones por usuario.
  */
 process.env.PETCARE_DB = ':memory:';
+process.env.PETCARE_UPLOADS = require('fs').mkdtempSync(require('path').join(require('os').tmpdir(), 'petcare-test-'));
 
 const { crearApp } = require('../src/app');
 const { sembrarDatos, PASSWORD_PRUEBA } = require('../src/dao/seed');

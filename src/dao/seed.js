@@ -12,6 +12,7 @@ function sembrarDatos() {
   controladores.propietarios.sembrar(PASSWORD_PRUEBA);
   controladores.citas.sembrar();
   controladores.consultas.sembrar();
+  controladores.historial.sembrar(controladores.citas.usuarioDAO.obtenerPorRol('veterinario')[0]);
 }
 
 module.exports = { sembrarDatos, PASSWORD_PRUEBA };
