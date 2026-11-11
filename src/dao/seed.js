@@ -16,6 +16,7 @@ function sembrarDatos() {
   controladores.historial.sembrar(veterinario);
   controladores.tratamientos.sembrar(veterinario);
   controladores.recetas.sembrar(veterinario);
+  controladores.recordatorios.sembrar(veterinario);
 }
 
 module.exports = { sembrarDatos, PASSWORD_PRUEBA };

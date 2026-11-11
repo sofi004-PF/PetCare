@@ -1,6 +1,7 @@
 import { get, post, configurarSesionExpirada } from './api.js';
 import { h, reemplazar, aviso } from './ui.js';
 import { MODULOS } from './modulos/index.js';
+import { paginaResponder } from './modulos/recordatorios.js';
 
 /**
  * Aplicación de una sola página (SPA) de PetCare.
@@ -18,6 +19,12 @@ configurarSesionExpirada(() => {
 });
 
 async function iniciar() {
+  // Página pública para responder recordatorios desde el mensaje (HU-03)
+  const respuesta = location.hash.match(/^#\/responder\/([a-f0-9]+)$/);
+  if (respuesta) {
+    paginaResponder(raiz, respuesta[1]);
+    return;
+  }
   try {
     Object.assign(estado, await get('/auth/sesion'));
     mostrarAplicacion();
@@ -141,5 +148,19 @@ async function navegar() {
   }
 }
 
-window.addEventListener('hashchange', navegar);
+window.addEventListener('hashchange', () => {
+  if (/^#\/responder\//.test(location.hash)) {
+    iniciar();
+    return;
+  }
+  if (estado.usuario && !document.getElementById('contenido')) {
+    mostrarAplicacion();
+    return;
+  }
+  if (!estado.usuario && !document.querySelector('.pantalla-login form')) {
+    iniciar();
+    return;
+  }
+  navegar();
+});
 iniciar();
