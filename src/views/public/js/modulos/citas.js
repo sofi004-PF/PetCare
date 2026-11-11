@@ -95,6 +95,9 @@ async function renderLista(contenedor, ctx) {
 }
 
 function accionesCita(cita, ctx) {
+  if (cita.estado === 'Programada' && ctx.usuario.rol === 'veterinario' && ctx.puede('consultas')) {
+    return h('a', { class: 'boton pequeno', href: `#/consultas/nueva/${cita.mascotaId}/${cita.id}` }, 'Atender');
+  }
   if (cita.estado !== 'Programada' || !PUEDEN_AGENDAR.includes(ctx.usuario.rol)) return '—';
   return h('div', { class: 'acciones' },
     h('button', { class: 'secundario pequeno', onClick: () => abrirReprogramar(cita, ctx) }, 'Reprogramar'),
