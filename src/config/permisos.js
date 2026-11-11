@@ -27,7 +27,8 @@ const PERMISOS = {
   tratamientos: ['administrador', 'veterinario', 'cliente'],
   recetas: ['administrador', 'veterinario', 'cliente'],
   recordatorios: ['administrador', 'veterinario', 'recepcionista', 'cliente'],
-  inventario: ['administrador']
+  inventario: ['administrador'],
+  facturas: ['administrador', 'recepcionista', 'cliente']
 };
 
 /**

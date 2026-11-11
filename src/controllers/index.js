@@ -8,6 +8,7 @@ const TratamientoController = require('./TratamientoController');
 const RecetaController = require('./RecetaController');
 const RecordatorioController = require('./RecordatorioController');
 const InventarioController = require('./InventarioController');
+const FacturaController = require('./FacturaController');
 
 /**
  * Registro único de controladores (fachadas) de PetCare.
@@ -27,7 +28,10 @@ const recetas = new RecetaController(propietarios, notificaciones);
 historial.registrarFuente((mascotaId) => recetas.eventosHistorial(mascotaId));
 const recordatorios = new RecordatorioController(propietarios, notificaciones);
 
+const facturas = new FacturaController(propietarios, inventario, notificaciones, citas);
+
 const controladores = {
+  facturas,
   inventario,
   recordatorios,
   usuarios,
